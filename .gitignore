@@ -1,0 +1,20 @@
+# IAR Settings  
+/EWARM/settings
+/EWARM/_build
+/EWARM/nrf52832_debug
+/EWARM_bl/settings
+/EWARM_bl/Debug
+/EWARM_bl/Release
+
+# Compiled binaries
+*.elf
+*.map
+
+# Trash
+*.bak
+
+# IAR backup files
+Backup*
+
+# IAR .dep files
+*.dep
