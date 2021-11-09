@@ -6,15 +6,46 @@
 /EWARM_bl/Debug
 /EWARM_bl/Release
 
+# IAR Debug Obj
+**/Obj/*.pbd
+**/Obj/*.pbd.*
+**/Obj/*.pbi
+**/Obj/*.pbi.*
+**/Obj/*.s
+**/Obj/*.i
+
+**/_build/*.xcl
+**/_build/*.pbi
+**/_build/*
+
+**/EWARM/Tion_IQ/List/*.s
+**/List/*.xcls
+
 # Compiled binaries
 *.elf
 *.map
+*.o
+*.i
 
 # Trash
 *.bak
+*.html
+*.htm
+log_*.txt
+
+# KEIL
+*.crf
+*.axf
+*.uvguix.*
+*.axf
+*.hex
 
 # IAR backup files
 Backup*
 
 # IAR .dep files
 *.dep
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/iar.json
