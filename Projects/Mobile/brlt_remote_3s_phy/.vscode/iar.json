@@ -1,6 +1,0 @@
-{
-    "version": 1,
-    "path": "C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.0\\",
-    "project": "${workspaceFolder}\\core\\brlt_remote_3s_phy.ewp",
-    "config": "nrf51822_xxaa"
-}
