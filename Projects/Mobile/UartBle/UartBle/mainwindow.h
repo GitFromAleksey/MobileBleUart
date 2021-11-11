@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <qlistwidget.h>
+#include "Ble/cbledevice.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,9 +18,13 @@ public:
     ~MainWindow();
 
 private slots:
+
     void on_pushButton_clicked();
+    void ListWidgetDeviceSelected(QListWidgetItem* item);
 
 private:
+    cBleDevice m_ble;
     Ui::MainWindow *ui;
+
 };
 #endif // MAINWINDOW_H

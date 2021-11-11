@@ -12,6 +12,7 @@
 
 #include <qobject.h>
 #include <qtextbrowser.h>
+#include <qlist.h>
 #include <QtBluetooth/QBluetoothDeviceDiscoveryAgent>
 #include <QtBluetooth/QBluetoothLocalDevice>
 
@@ -23,11 +24,17 @@ public:
 
     void StartDiscovereDevices();
 
-    void SetScanResultsCallback(QTextBrowser *qtb);
+    QString GetDevInfoByName(const QString &name);
+
+    void SetScanResultsCallback(void (*printNameOfDevice)(const QString &text));
+    void SetClearDevListCallback(void (*clearDevList)());
 
 private:
     QBluetoothDeviceDiscoveryAgent *p_bda;
-    QTextBrowser *p_qtb;
+    QList<QBluetoothDeviceInfo> m_DevsList;
+
+    void (*printNameOfDevice)(const QString &text);
+    void (*clearDevList)();
 
     void SetupBluetoothDeviceDiscoveryAgent();
 
