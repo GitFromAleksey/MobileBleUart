@@ -32,6 +32,7 @@
 *.html
 *.htm
 log_*.txt
+*.pro.*
 
 # KEIL
 *.crf
