@@ -33,6 +33,8 @@
 *.htm
 log_*.txt
 *.pro.*
+**/build-*-remote-Android_Qt*/*
+**/build-*-Android_Qt*/*
 
 # KEIL
 *.crf
