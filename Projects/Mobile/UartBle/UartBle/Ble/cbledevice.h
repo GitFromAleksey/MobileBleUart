@@ -41,10 +41,14 @@ private slots:
     void ServiceDiscovered(const QBluetoothUuid &newService);
     void ServiceDiscoveryFinished();
 
+    // QLowEnergyService slots
+    void ServiceStateChanged(QLowEnergyService::ServiceState newState);
+
 private:
     QBluetoothDeviceDiscoveryAgent *m_DevsDicoveriAgent;
     QList<QBluetoothDeviceInfo> m_DevsList;
     QLowEnergyController* m_control;
+    QLowEnergyService *m_service;
     QBluetoothLocalDevice *m_LocalDevice;
 
     void (*printNameOfDevice)(const QString &text);
