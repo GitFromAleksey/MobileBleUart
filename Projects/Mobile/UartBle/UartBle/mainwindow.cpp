@@ -37,6 +37,7 @@ void MainWindow::ListWidgetDeviceSelected(QListWidgetItem* item)
 {
     QString dev_info = m_ble.GetDevInfoByName(item->text());
 
+    m_ble.SetCurrentDeviceByName(item->text());
     p_ui->textBrowser->setText(dev_info);
 }
 // -----------------------------------------------------------------------------
@@ -52,3 +53,18 @@ void ClearDeviceList()
     p_ui->listWidget->clear();
     p_ui->textBrowser->clear();
 }
+
+//void DeviceSelector::on_unpairButton_clicked()
+//{
+//    QList<QListWidgetItem *> items = ui->devicesList->findItems("IQ", Qt::MatchContains);
+//    QString text, adress;
+//    QBluetoothAddress devAddr;
+
+//    for (int i = 0; i < items.size(); ++i)
+//    {
+//        text = items.at(i)->text();
+//        adress = text.left(text.indexOf(" "));
+//        devAddr = QBluetoothAddress(adress);
+//        localDevice->requestPairing(devAddr, QBluetoothLocalDevice::Unpaired);
+//    }
+//}
