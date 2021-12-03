@@ -293,6 +293,10 @@ void cBleDevice::DeviceDiscoveredCallback(const QBluetoothDeviceInfo &device)
     // If device is LowEnergy-device, add it to the list
     if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
     {
+        for(auto it = m_DevsList.begin(); it != m_DevsList.end(); ++it)
+            if(it->address() == device.address())
+                return;
+
         m_DevsList.append(device);
         printNameOfDevice(device.name());
     }

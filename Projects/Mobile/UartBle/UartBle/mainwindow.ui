@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>685</width>
-    <height>674</height>
+    <width>1057</width>
+    <height>1223</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,32 +19,70 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>661</width>
+      <width>1031</width>
       <height>91</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Lets scan</string>
     </property>
    </widget>
    <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
-      <width>661</width>
+      <y>210</y>
+      <width>1031</width>
       <height>131</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>261</y>
-      <width>661</width>
-      <height>361</height>
+      <y>350</y>
+      <width>511</width>
+      <height>921</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>350</y>
+      <width>511</width>
+      <height>921</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>1031</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Send data</string>
     </property>
    </widget>
   </widget>
@@ -53,7 +91,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>685</width>
+     <width>1057</width>
      <height>26</height>
     </rect>
    </property>
