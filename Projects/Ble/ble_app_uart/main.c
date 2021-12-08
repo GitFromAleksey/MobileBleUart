@@ -526,7 +526,19 @@ void uart_event_handle(app_uart_evt_t * p_event)
 
     switch (p_event->evt_type)
     {
-        case APP_UART_DATA_READY:
+//    ,          /**< An event indicating that UART data has been received. The data is available in the FIFO and can be fetched using @ref app_uart_get. */
+//    ,          /**< An error in the FIFO module used by the app_uart module has occured. The FIFO error code is stored in app_uart_evt_t.data.error_code field. */
+//    , /**< An communication error has occured during reception. The error is stored in app_uart_evt_t.data.error_communication field. */
+//    ,            /**< An event indicating that UART has completed transmission of all available data in the TX FIFO. */
+//    ,                /**< An event indicating that UART data has been received, and data is present in data field. This event is only used when no FIFO is configured. */
+
+      case APP_UART_TX_EMPTY:
+        err_code = 0;
+        break;
+      case APP_UART_DATA:
+        err_code = 0;
+        break;
+      case APP_UART_DATA_READY:
             UNUSED_VARIABLE(app_uart_get(&data_array[index]));
             index++;
 

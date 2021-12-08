@@ -31,6 +31,8 @@ public:
     void SetScanResultsCallback(void (*printNameOfDevice)(const QString &text));
     void SetClearDevListCallback(void (*clearDevList)());
 
+    void SendMessage(const QString &text);
+
 private slots:
 
     void DeviceConnected(const QBluetoothAddress &address);
@@ -50,6 +52,9 @@ private:
     QLowEnergyController* m_control;
     QLowEnergyService *m_service;
     QBluetoothLocalDevice *m_LocalDevice;
+    QLowEnergyCharacteristic m_ReadCharacteristic;
+    QLowEnergyCharacteristic m_WriteCharacteristic;
+    QLowEnergyDescriptor m_NotificationDesc;
 
     void (*printNameOfDevice)(const QString &text);
     void (*clearDevList)();

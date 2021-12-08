@@ -33,6 +33,11 @@ void MainWindow::on_pushButton_clicked()
     m_ble.StartDiscovereDevices();
 }
 // -----------------------------------------------------------------------------
+void MainWindow::on_pushButton_2_clicked()
+{
+    m_ble.SendMessage("hello!");
+}
+
 void MainWindow::ListWidgetDeviceSelected(QListWidgetItem* item)
 {
     QString dev_info = m_ble.GetDevInfoByName(item->text());
@@ -68,3 +73,6 @@ void ClearDeviceList()
 //        localDevice->requestPairing(devAddr, QBluetoothLocalDevice::Unpaired);
 //    }
 //}
+
+
+

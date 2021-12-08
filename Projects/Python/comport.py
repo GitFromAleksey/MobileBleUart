@@ -193,9 +193,9 @@ def main():
     serial_port.SetPort(port_name)
     serial_port.OpenPort()
 
-##    data_bytes = b'hello!'
-##    serial_port.WriteData(data_bytes)
-##    time.sleep(5)
+    data_bytes = b'hello!'
+    serial_port.WriteData(data_bytes)
+    time.sleep(5)
 
     
 

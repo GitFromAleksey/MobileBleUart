@@ -22,6 +22,8 @@ private slots:
     void on_pushButton_clicked();
     void ListWidgetDeviceSelected(QListWidgetItem* item);
 
+    void on_pushButton_2_clicked();
+
 private:
     cBleDevice m_ble;
     Ui::MainWindow *ui;

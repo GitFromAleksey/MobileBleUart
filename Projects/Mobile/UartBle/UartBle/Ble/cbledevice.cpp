@@ -62,7 +62,7 @@ void cBleDevice::SetupLowEnergyController(const QBluetoothAddress &address)
             connect(m_control, &QLowEnergyController::connected, this, [this]()
             {
 //                setInfo("Controller connected. Search services...");
-                printNameOfDevice("Controller connected. Search services...");
+                printNameOfDevice("Controller connected. Discover services...");
                 m_control->discoverServices();
             });
             connect(m_control, &QLowEnergyController::disconnected, this, [this]()
@@ -76,7 +76,7 @@ void cBleDevice::SetupLowEnergyController(const QBluetoothAddress &address)
 
 void cBleDevice::ServiceDiscovered(const QBluetoothUuid &newService)
 {
-    printNameOfDevice(newService.toString() + ";");
+    printNameOfDevice("- ServiceDiscovered:" + newService.toString() + ";");
 
 //    if(newService == QBluetoothUuid(QBluetoothUuid::)
     if(newService == QBluetoothUuid(QBluetoothUuid::ServiceDiscoveryServer)){printNameOfDevice("ServiceDiscoveryServer");}
@@ -172,7 +172,7 @@ void cBleDevice::ServiceDiscovered(const QBluetoothUuid &newService)
     else if(newService == QBluetoothUuid(QBluetoothUuid::ContinuousGlucoseMonitoring)){printNameOfDevice("ContinuousGlucoseMonitoring");}//0x181f
     else
     {
-        printNameOfDevice("Unknown service!");
+        printNameOfDevice("Unknown service! DiscoverDetails...");
         m_service = m_control->createServiceObject(newService);
 
         connect(m_service, &QLowEnergyService::stateChanged, this, &cBleDevice::ServiceStateChanged);
@@ -183,11 +183,19 @@ void cBleDevice::ServiceDiscovered(const QBluetoothUuid &newService)
     }
 }
 
+void cBleDevice::SendMessage(const QString &text)
+{
+    QByteArray array = text.toLocal8Bit();
+
+//    m_service->writeCharacteristic(m_WriteCharacteristic, array, QLowEnergyService::WriteWithoutResponse);
+    m_service->writeCharacteristic(m_WriteCharacteristic, array, QLowEnergyService::WriteWithResponse);
+}
+
 void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
 {
     QList<QLowEnergyCharacteristic> hrChar;
 
-    printNameOfDevice("ServiceStateChanged:");
+    printNameOfDevice("ServiceStateChanged ServiceState:");
     switch (newState)
     {
     case QLowEnergyService::InvalidService:
@@ -206,7 +214,55 @@ void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
         hrChar = m_service->characteristics();
         for(auto it = hrChar.begin(); it != hrChar.end(); ++it)
         {
-            printNameOfDevice("name: " + it->name() + "; uuid: " + it->uuid().toString());
+//            if(it->isValid())
+            printNameOfDevice("service name: " + it->name() + "; uuid: " + it->uuid().toString());
+
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Unknown)
+                    printNameOfDevice("Property Unknown");
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Broadcasting)
+                    printNameOfDevice("Property Broadcasting");
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteNoResponse)
+                    printNameOfDevice("Property WriteNoResponse");
+
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Notify)
+                    printNameOfDevice("Property Notify");
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Indicate)
+                    printNameOfDevice("Property Indicate");
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteSigned)
+                    printNameOfDevice("Property WriteSigned");
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::ExtendedProperty)
+                    printNameOfDevice("Property ExtendedProperty");
+
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Read)
+                {
+                    m_ReadCharacteristic = *it;
+                    printNameOfDevice("Property Read");
+                }
+//                if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteNoResponse)
+//                {
+//                    m_WriteCharacteristic = *it;
+//                    printNameOfDevice("Property WriteNoResponse");
+//                    m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+
+//                    if(m_NotificationDesc.isValid())
+//                    {
+//                        m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
+//                    }
+//                }
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Write)
+                {
+                    m_WriteCharacteristic = *it;
+                    printNameOfDevice("Property Write");
+
+                    m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+
+                    if(m_NotificationDesc.isValid())
+                    {
+                        m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
+                    }
+                }
+
+//                m_service->writeDescriptor()
         }
 
         break;
@@ -241,6 +297,7 @@ void cBleDevice::DeviceScanFinishedCallback()
     printNameOfDevice("Scan Finished");
 }
 
+// start pairing to device
 bool cBleDevice::SetCurrentDeviceByName(const QString &name)
 {
     m_DevsDicoveriAgent->stop();
@@ -303,7 +360,7 @@ void cBleDevice::DeviceDiscoveredCallback(const QBluetoothDeviceInfo &device)
 }
 void cBleDevice::DeviceConnected(const QBluetoothAddress &address)
 {
-    printNameOfDevice("DeviceConnected: " + address.toString());
+    printNameOfDevice("m_LocalDevice DeviceConnected: " + address.toString());
 
     SetupLowEnergyController(address);
 
@@ -311,13 +368,13 @@ void cBleDevice::DeviceConnected(const QBluetoothAddress &address)
 }
 void cBleDevice::DeviceDisconnected(const QBluetoothAddress &address)
 {
-    printNameOfDevice("DeviceDisconnected: " + address.toString());
+    printNameOfDevice("m_LocalDevice DeviceDisconnected: " + address.toString());
 }
 void cBleDevice::PairingFinished(QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing)
 {
     QString text;
 
-    text.append("device is pair:");
+    text.append("m_LocalDevice PairingFinished:");
     text.append(address.toString());
     printNameOfDevice(text);
 }
