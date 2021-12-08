@@ -45,6 +45,9 @@ private slots:
 
     // QLowEnergyService slots
     void ServiceStateChanged(QLowEnergyService::ServiceState newState);
+    void CharacteristicWritten(const QLowEnergyCharacteristic &info, const QByteArray &value);
+    void DescriptorRead(const QLowEnergyDescriptor &info, const QByteArray &value);
+    void CharacteristicChanged(const QLowEnergyCharacteristic &info, const QByteArray &value);
 
 private:
     QBluetoothDeviceDiscoveryAgent *m_DevsDicoveriAgent;

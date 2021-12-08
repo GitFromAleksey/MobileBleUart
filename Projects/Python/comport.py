@@ -193,7 +193,7 @@ def main():
     serial_port.SetPort(port_name)
     serial_port.OpenPort()
 
-    data_bytes = b'hello!'
+    data_bytes = b'hello from python!\n'
     serial_port.WriteData(data_bytes)
     time.sleep(5)
 
@@ -201,6 +201,7 @@ def main():
 
     while True:
         time.sleep(1)
+##        serial_port.WriteData(data_bytes)
 
     serial_port.ClosePort()
     print('exit main')

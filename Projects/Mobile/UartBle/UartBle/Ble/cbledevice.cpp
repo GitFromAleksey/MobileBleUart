@@ -176,8 +176,18 @@ void cBleDevice::ServiceDiscovered(const QBluetoothUuid &newService)
         m_service = m_control->createServiceObject(newService);
 
         connect(m_service, &QLowEnergyService::stateChanged, this, &cBleDevice::ServiceStateChanged);
-//        connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleDevice::updateHeartRateValue);
-//        connect(m_service, &QLowEnergyService::descriptorWritten, this, &cBleDevice::confirmedDescriptorWrite);
+        connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleDevice::CharacteristicWritten);
+        connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleDevice::DescriptorRead);
+        connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleDevice::CharacteristicChanged);
+
+//void stateChanged(QLowEnergyService::ServiceState newState);
+//void characteristicChanged(const QLowEnergyCharacteristic &info, const QByteArray &value);
+//void characteristicRead(const QLowEnergyCharacteristic &info, const QByteArray &value);
+//void characteristicWritten(const QLowEnergyCharacteristic &info, const QByteArray &value);
+//void descriptorRead(const QLowEnergyDescriptor &info, const QByteArray &value);
+//void descriptorWritten(const QLowEnergyDescriptor &info, const QByteArray &value);
+//void error(QLowEnergyService::ServiceError error);
+
         m_service->discoverDetails();
 
     }
@@ -190,10 +200,27 @@ void cBleDevice::SendMessage(const QString &text)
 //    m_service->writeCharacteristic(m_WriteCharacteristic, array, QLowEnergyService::WriteWithoutResponse);
     m_service->writeCharacteristic(m_WriteCharacteristic, array, QLowEnergyService::WriteWithResponse);
 }
+// подтверждение отправки SendMessage
+void cBleDevice::CharacteristicWritten(const QLowEnergyCharacteristic &info, const QByteArray &value)
+{
+
+}
+// приём данных от BLE устройства
+void cBleDevice::CharacteristicChanged(const QLowEnergyCharacteristic &info, const QByteArray &value)
+{
+
+}
+// ХЗ
+void cBleDevice::DescriptorRead(const QLowEnergyDescriptor &info, const QByteArray &value)
+{
+
+
+}
 
 void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
 {
     QList<QLowEnergyCharacteristic> hrChar;
+    QString tmp_string = "";
 
     printNameOfDevice("ServiceStateChanged ServiceState:");
     switch (newState)
@@ -215,6 +242,8 @@ void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
         for(auto it = hrChar.begin(); it != hrChar.end(); ++it)
         {
 //            if(it->isValid())
+            m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+
             printNameOfDevice("service name: " + it->name() + "; uuid: " + it->uuid().toString());
 
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Unknown)
@@ -224,8 +253,7 @@ void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteNoResponse)
                     printNameOfDevice("Property WriteNoResponse");
 
-                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Notify)
-                    printNameOfDevice("Property Notify");
+
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Indicate)
                     printNameOfDevice("Property Indicate");
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteSigned)
@@ -236,7 +264,10 @@ void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Read)
                 {
                     m_ReadCharacteristic = *it;
-                    printNameOfDevice("Property Read");
+                    tmp_string = "";
+                    tmp_string.append("Property Read uuid: ");
+                    tmp_string.append(m_ReadCharacteristic.uuid().toString());
+                    printNameOfDevice(tmp_string);
                 }
 //                if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteNoResponse)
 //                {
@@ -249,19 +280,34 @@ void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
 //                        m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
 //                    }
 //                }
+
+                // характеристика для отправки данных BLE устройству
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Write)
                 {
                     m_WriteCharacteristic = *it;
                     printNameOfDevice("Property Write");
 
-                    m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+//                    m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
 
-                    if(m_NotificationDesc.isValid())
-                    {
-                        m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
-                    }
+//                    if(m_NotificationDesc.isValid())
+//                    {
+//                        m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
+//                    }
                 }
 
+                // Notification - это типа уведомление от BLE устройства, т.е. приём данных
+                if(it->properties() & QLowEnergyCharacteristic::PropertyType::Notify)
+                {
+                    m_ReadCharacteristic = *it;
+
+                    //m_NotificationDesc = it->descriptor(m_ReadCharacteristic.uuid());
+                    m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+
+                    // TODO что за 0100? я так и не разобрался
+                    m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
+
+                    printNameOfDevice("Property Notify");
+                }
 //                m_service->writeDescriptor()
         }
 
@@ -375,6 +421,20 @@ void cBleDevice::PairingFinished(QBluetoothAddress address, QBluetoothLocalDevic
     QString text;
 
     text.append("m_LocalDevice PairingFinished:");
+    switch (pairing)
+    {
+        case QBluetoothLocalDevice::Pairing::AuthorizedPaired:
+            text.append(" AuthorizedPaired; ");
+            break;
+        case QBluetoothLocalDevice::Pairing::Paired:
+            text.append(" Paired; ");
+            break;
+        case QBluetoothLocalDevice::Pairing::Unpaired:
+            text.append(" Unpaired; ");
+            break;
+        default:
+            break;
+    }
     text.append(address.toString());
     printNameOfDevice(text);
 }

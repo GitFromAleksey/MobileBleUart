@@ -1,0 +1,5 @@
+https://russianblogs.com/article/6177854944/ - qt
+https://habr.com/ru/post/536392/ - java
+https://punchthrough.com/android-ble-guide/ - java
+https://infocenter.nordicsemi.com/index.jsp?topic=%2Fcom.nordic.infocenter.sdk5.v14.0.0%2Fble_sdk_app_nus_eval.html - nRf 
+https://doc.qt.io/qt-5/qtbluetooth-le-overview.html - 

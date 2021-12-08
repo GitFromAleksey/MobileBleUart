@@ -139,9 +139,8 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 1 "EMUL_CODE" "{C:\git\TION\MobileBleUart\Projects\Ble\ble_app_uart\main.c}.572.13" 0 0 1 "" 0 "" 0</Bp0>
-        <Bp1>_ 1 "EMUL_CODE" "{C:\git\TION\MobileBleUart\Projects\Ble\ble_app_uart\main.c}.576.13" 0 0 1 "" 0 "" 0</Bp1>
-        <Count>2</Count>
+        <Bp0>_ 1 "EMUL_CODE" "{C:\git\TION\MobileBleUart\Projects\Ble\ble_app_uart\main.c}.557.25" 0 0 1 "" 0 "" 0</Bp0>
+        <Count>1</Count>
     </Breakpoints2>
     <Aliases>
         <Count>0</Count>
