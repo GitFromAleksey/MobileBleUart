@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <qlistwidget.h>
-#include "Ble/cbledevice.h"
+#include "Ble/cbledevice_old.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

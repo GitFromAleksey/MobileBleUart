@@ -1,5 +1,5 @@
-#ifndef CBLEDEVICE_H
-#define CBLEDEVICE_H
+#ifndef CBLEDEVICE_OLD_H
+#define CBLEDEVICE_OLD_H
 
 //#include "brlt/remotecontroller.h"
 //#include "br4s/br4s_mainwindow.h"
@@ -71,4 +71,4 @@ private:
 
 };
 
-#endif // CBLEDEVICE_H
+#endif // CBLEDEVICE_OLD_H

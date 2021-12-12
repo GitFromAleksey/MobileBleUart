@@ -10,12 +10,16 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Ble/cbledevice.cpp \
+    Ble/cbledev.cpp \
+    Ble/cbledevice_old.cpp \
+    Ble/cblediscoverydevicesagent.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    Ble/cbledevice.h \
+    Ble/cbledev.h \
+    Ble/cbledevice_old.h \
+    Ble/cblediscoverydevicesagent.h \
     mainwindow.h
 
 FORMS += \

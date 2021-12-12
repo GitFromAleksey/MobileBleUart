@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1057</width>
-    <height>1223</height>
+    <height>1594</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,6 +83,16 @@
     </property>
     <property name="text">
      <string>Send data</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser_log">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>1280</y>
+      <width>1031</width>
+      <height>271</height>
+     </rect>
     </property>
    </widget>
   </widget>

@@ -28,14 +28,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 // -----------------------------------------------------------------------------
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked() // сканирование BLE устройств
 {
     m_ble.StartDiscovereDevices();
 }
 // -----------------------------------------------------------------------------
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked() // отправка сообщения по BLE
 {
-    m_ble.SendMessage("hello!");
+    m_ble.SendMessage("hello from mobile!\n");
+//    ui->textBrowser_log->append("hello from mobile!");
 }
 
 void MainWindow::ListWidgetDeviceSelected(QListWidgetItem* item)

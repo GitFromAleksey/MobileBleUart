@@ -1,4 +1,4 @@
-#include "cbledevice.h"
+#include "cbledevice_old.h"
 
 cBleDevice::cBleDevice() :
     m_DevsDicoveriAgent(nullptr),
@@ -208,13 +208,12 @@ void cBleDevice::CharacteristicWritten(const QLowEnergyCharacteristic &info, con
 // приём данных от BLE устройства
 void cBleDevice::CharacteristicChanged(const QLowEnergyCharacteristic &info, const QByteArray &value)
 {
-
+    QString s = QString(value);
+    printNameOfDevice(s);
 }
 // ХЗ
 void cBleDevice::DescriptorRead(const QLowEnergyDescriptor &info, const QByteArray &value)
 {
-
-
 }
 
 void cBleDevice::ServiceStateChanged(QLowEnergyService::ServiceState newState)
