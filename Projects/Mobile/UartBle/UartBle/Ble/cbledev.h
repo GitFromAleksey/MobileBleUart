@@ -6,6 +6,7 @@
 #include <QString>
 #include "Ble/cblediscoverydevicesagent.h"
 #include <QtBluetooth/QBluetoothLocalDevice>
+#include "Ble/cblecontroller.h"
 
 class cBleDev : public QObject
 {
@@ -39,6 +40,7 @@ private:
     cBleDiscoveryDevicesAgent *m_BleDiscoveryAgent;
     QBluetoothDeviceInfo m_CurrentDevInfo;
     QBluetoothLocalDevice m_CurrentDevice;
+    cBleController m_BleController;
 };
 
 #endif // CBLEDEV_H
