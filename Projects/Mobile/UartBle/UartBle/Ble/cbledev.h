@@ -19,15 +19,19 @@ public:
     explicit cBleDev(QObject *parent = nullptr);
 
     void StartFindDevices(void);
+    void SetDeviceByAddress(const QString &address);
 
 private slots:
 
-    void DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e);
+    void slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e);
 
 signals:
 
+    void signalSendNewDeviceInfo(const QString name, const QString address);
+
 private:
     cBleDiscoveryDevicesAgent *m_BleDiscoveryAgent;
+    QBluetoothDeviceInfo m_CurrentDevInfo;
 };
 
 #endif // CBLEDEV_H

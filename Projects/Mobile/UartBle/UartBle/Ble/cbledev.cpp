@@ -5,7 +5,7 @@ cBleDev::cBleDev(QObject *parent) : QObject(parent)
     m_BleDiscoveryAgent = new cBleDiscoveryDevicesAgent(this);
 
     connect(m_BleDiscoveryAgent,  &cBleDiscoveryDevicesAgent::eventSignal,
-            this,           &cBleDev::DiscoveryAgentEventHandler);
+            this,           &cBleDev::slotDiscoveryAgentEventHandler);
 }
 // ----------------------------------------------------------------------------
 void cBleDev::StartFindDevices(void)
@@ -14,9 +14,15 @@ void cBleDev::StartFindDevices(void)
         m_BleDiscoveryAgent->StartDiscovery();
 }
 // ----------------------------------------------------------------------------
-void cBleDev::DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e)
+void cBleDev::SetDeviceByAddress(const QString &address)
 {
-    QMap<QString, QString> devlist;
+    m_CurrentDevInfo = m_BleDiscoveryAgent->GetDeviceInfoByAddress(address);
+}
+// ----------------------------------------------------------------------------
+void cBleDev::slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e)
+{
+    QString name;
+    QString address;
 
     switch (e)
     {
@@ -24,10 +30,11 @@ void cBleDev::DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events
 
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoveredNewDevice:
-
+            m_BleDiscoveryAgent->GetLastFindingDevice(name, address);
+            signalSendNewDeviceInfo(name, address);
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverFinished:
-            devlist = m_BleDiscoveryAgent->GetFindingDevices();
+
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverCanceled:
 

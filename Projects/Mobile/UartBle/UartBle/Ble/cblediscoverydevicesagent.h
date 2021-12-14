@@ -25,6 +25,8 @@ public:
     void StartDiscovery();
 
     QMap<QString, QString> GetFindingDevices();
+    void GetLastFindingDevice(QString &name, QString &address);
+    QBluetoothDeviceInfo GetDeviceInfoByAddress(const QString &address);
 
 private slots:
     void DeviceDiscovered(const QBluetoothDeviceInfo &info);
@@ -37,6 +39,7 @@ signals:
 private:
     QBluetoothDeviceDiscoveryAgent *m_DevsDicoveryAgent;
     QList<QBluetoothDeviceInfo> m_DevicesList;
+    QBluetoothDeviceInfo m_LastFindingDevice;
 
 };
 

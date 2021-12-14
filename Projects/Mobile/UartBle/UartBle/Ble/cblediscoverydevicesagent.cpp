@@ -39,6 +39,35 @@ QMap<QString, QString> cBleDiscoveryDevicesAgent::GetFindingDevices()
     return result;
 }
 // ----------------------------------------------------------------------------
+void cBleDiscoveryDevicesAgent::GetLastFindingDevice(QString &name, QString &address)
+{
+    name = m_LastFindingDevice.name();
+    address = m_LastFindingDevice.address().toString();
+}
+// ----------------------------------------------------------------------------
+QBluetoothDeviceInfo cBleDiscoveryDevicesAgent::GetDeviceInfoByAddress(const QString &address)
+{
+    QBluetoothDeviceInfo dev_info;
+
+    for(auto it = m_DevicesList.begin(); it != m_DevicesList.end(); ++it)
+    {
+        if(it->address().toString() == address)
+        {
+            dev_info = *it;
+        }
+    }
+    return dev_info;
+}
+// ----------------------------------------------------------------------------
+QBluetoothDeviceInfo GetDeviceInfoByAddress(const QString &address)
+{
+    QBluetoothDeviceInfo dev_info;
+
+
+
+    return dev_info;
+}
+// ----------------------------------------------------------------------------
 // Обнаружено устройство
 void cBleDiscoveryDevicesAgent::DeviceDiscovered(const QBluetoothDeviceInfo &info)
 {
@@ -50,6 +79,7 @@ void cBleDiscoveryDevicesAgent::DeviceDiscovered(const QBluetoothDeviceInfo &inf
                 return;
 
         m_DevicesList.append(info);
+        m_LastFindingDevice = info;
 
         emit eventSignal(e_DiscoveredNewDevice);
     }

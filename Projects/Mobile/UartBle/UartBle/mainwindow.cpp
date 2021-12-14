@@ -19,11 +19,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_ble.SetScanResultsCallback(PrintNameOfDevice);
     m_ble.SetClearDevListCallback(ClearDeviceList);
 
-    connect(ui->listWidget, SIGNAL(itemPressed(QListWidgetItem*)),
+    connect(ui->listWidgetDevNames, SIGNAL(itemPressed(QListWidgetItem*)),
             this, SLOT(ListWidgetDeviceSelected(QListWidgetItem*)));
 
     m_BleDevTest = new cBleDev();
-    m_BleDevTest->StartFindDevices();
+    connect(m_BleDevTest, &cBleDev::signalSendNewDeviceInfo,
+            this, &MainWindow::slotPrintNewDeviceInfo);
 }
 // -----------------------------------------------------------------------------
 MainWindow::~MainWindow()
@@ -33,7 +34,11 @@ MainWindow::~MainWindow()
 // -----------------------------------------------------------------------------
 void MainWindow::on_pushButton_clicked() // сканирование BLE устройств
 {
-    m_ble.StartDiscovereDevices();
+//    m_ble.StartDiscovereDevices();
+    ui->listWidgetDevNames->clear();
+    ui->listWidget_2->clear();
+
+    m_BleDevTest->StartFindDevices();
 }
 // -----------------------------------------------------------------------------
 void MainWindow::on_pushButton_2_clicked() // отправка сообщения по BLE
@@ -46,37 +51,38 @@ void MainWindow::ListWidgetDeviceSelected(QListWidgetItem* item)
 {
     QString dev_info = m_ble.GetDevInfoByName(item->text());
 
-    m_ble.SetCurrentDeviceByName(item->text());
-    p_ui->textBrowser->setText(dev_info);
+    int row = ui->listWidgetDevNames->currentRow();
+
+    m_cur_dev_name = item->text();
+    m_cur_dev_addr = ui->listWidget_2->item(row)->text();
+    p_ui->textBrowser->setText(m_cur_dev_name + "; " + m_cur_dev_addr);
+}
+// -----------------------------------------------------------------------------
+void MainWindow::slotPrintNewDeviceInfo(const QString name, const QString address)
+{
+//    PrintNameOfDevice(name + ":" + address);
+    p_ui->listWidgetDevNames->addItem(name);
+    p_ui->listWidget_2->addItem(address);
+}
+// -----------------------------------------------------------------------------
+void MainWindow::on_pushButtonConnect_clicked()
+{
+    m_BleDevTest->SetDeviceByAddress(m_cur_dev_addr);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void PrintNameOfDevice(const QString &text)
 {
-    p_ui->listWidget->addItem(text);
+    p_ui->listWidgetDevNames->addItem(text);
 //    p_ui->textBrowser->setText(text);
 }
 // -----------------------------------------------------------------------------
 void ClearDeviceList()
 {
-    p_ui->listWidget->clear();
+    p_ui->listWidgetDevNames->clear();
     p_ui->textBrowser->clear();
 }
 
-//void DeviceSelector::on_unpairButton_clicked()
-//{
-//    QList<QListWidgetItem *> items = ui->devicesList->findItems("IQ", Qt::MatchContains);
-//    QString text, adress;
-//    QBluetoothAddress devAddr;
-
-//    for (int i = 0; i < items.size(); ++i)
-//    {
-//        text = items.at(i)->text();
-//        adress = text.left(text.indexOf(" "));
-//        devAddr = QBluetoothAddress(adress);
-//        localDevice->requestPairing(devAddr, QBluetoothLocalDevice::Unpaired);
-//    }
-//}
 
 
 
