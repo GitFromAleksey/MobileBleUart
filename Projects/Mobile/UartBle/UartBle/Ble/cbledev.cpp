@@ -12,7 +12,7 @@ cBleDev::cBleDev(QObject *parent) : QObject(parent)
             this,           &cBleDev::slotPairingFinished);
     connect(&m_CurrentDevice,  &QBluetoothLocalDevice::deviceConnected,
             this,           &cBleDev::slotDeviceConnected);
-    connect(&m_CurrentDevice,  &QBluetoothLocalDevice::deviceConnected,
+    connect(&m_CurrentDevice,  &QBluetoothLocalDevice::deviceDisconnected,
             this,           &cBleDev::slotDeviceDisconnected);
 //    connect(m_LocalDevice,
 //            SIGNAL(pairingFinished(QBluetoothAddress,QBluetoothLocalDevice::Pairing))
@@ -86,11 +86,14 @@ void cBleDev::slotDeviceConnected(const QBluetoothAddress &address)
 {
 //    printNameOfDevice("m_LocalDevice DeviceConnected: " + address.toString());
 
-    m_BleController.SetBleDevice(m_CurrentDevInfo);
+    if(m_CurrentDevInfo.address() == address)
+
+        m_BleController.SetBleDevice(m_CurrentDevInfo);
 
 //    m_control->connectToDevice();
 }
 void cBleDev::slotDeviceDisconnected(const QBluetoothAddress &address)
 {
 //    printNameOfDevice("m_LocalDevice DeviceDisconnected: " + address.toString());
+//    m_BleController.SetBleDevice(m_CurrentDevInfo);
 }
