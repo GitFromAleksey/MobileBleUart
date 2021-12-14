@@ -28,6 +28,17 @@ void cBleDiscoveryDevicesAgent::StartDiscovery()
     m_DevsDicoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 }
 // ----------------------------------------------------------------------------
+QMap<QString, QString> cBleDiscoveryDevicesAgent::GetFindingDevices()
+{
+    QMap<QString, QString> result;
+
+    for(auto it = m_DevicesList.begin(); it != m_DevicesList.end(); ++it)
+    {
+        result[it->address().toString()] = it->name();
+    }
+    return result;
+}
+// ----------------------------------------------------------------------------
 // Обнаружено устройство
 void cBleDiscoveryDevicesAgent::DeviceDiscovered(const QBluetoothDeviceInfo &info)
 {

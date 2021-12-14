@@ -2,6 +2,8 @@
 #define CBLEDISCOVERYDEVICESAGENT_H
 
 #include <QObject>
+#include <QMap>
+#include <QString>
 #include <QtBluetooth/QBluetoothDeviceDiscoveryAgent>
 
 class cBleDiscoveryDevicesAgent : public QObject
@@ -21,6 +23,8 @@ public:
     explicit cBleDiscoveryDevicesAgent(QObject *parent = nullptr);
 
     void StartDiscovery();
+
+    QMap<QString, QString> GetFindingDevices();
 
 private slots:
     void DeviceDiscovered(const QBluetoothDeviceInfo &info);

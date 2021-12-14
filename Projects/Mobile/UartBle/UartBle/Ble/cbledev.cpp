@@ -16,6 +16,8 @@ void cBleDev::StartFindDevices(void)
 // ----------------------------------------------------------------------------
 void cBleDev::DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e)
 {
+    QMap<QString, QString> devlist;
+
     switch (e)
     {
         case cBleDiscoveryDevicesAgent::Events::e_deviceUpdated:
@@ -25,7 +27,7 @@ void cBleDev::DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events
 
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverFinished:
-
+            devlist = m_BleDiscoveryAgent->GetFindingDevices();
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverCanceled:
 

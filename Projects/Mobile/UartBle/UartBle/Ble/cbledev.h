@@ -1,7 +1,9 @@
 #ifndef CBLEDEV_H
 #define CBLEDEV_H
 
-#include <qobject.h>
+#include <QObject>
+#include <QMap>
+#include <QString>
 #include "Ble/cblediscoverydevicesagent.h"
 
 class cBleDev : public QObject
