@@ -23,6 +23,7 @@ public:
     explicit cBleDiscoveryDevicesAgent(QObject *parent = nullptr);
 
     void StartDiscovery();
+    void StopDiscovery();
 
     QMap<QString, QString> GetFindingDevices();
     void GetLastFindingDevice(QString &name, QString &address);

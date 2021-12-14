@@ -5,14 +5,14 @@ cBleDevice::cBleDevice() :
     m_LocalDevice(new QBluetoothLocalDevice(this)),
     printNameOfDevice(nullptr)
 {
-    connect(m_LocalDevice,  &QBluetoothLocalDevice::pairingFinished ,
-            this,           &cBleDevice::PairingFinished);
+//    connect(m_LocalDevice,  &QBluetoothLocalDevice::pairingFinished ,
+//            this,           &cBleDevice::PairingFinished);
 
-    connect(m_LocalDevice,  &QBluetoothLocalDevice::deviceConnected,
-            this,           &cBleDevice::DeviceConnected);
+//    connect(m_LocalDevice,  &QBluetoothLocalDevice::deviceConnected,
+//            this,           &cBleDevice::DeviceConnected);
 
-    connect(m_LocalDevice,  &QBluetoothLocalDevice::deviceConnected,
-            this,           &cBleDevice::DeviceDisconnected);
+//    connect(m_LocalDevice,  &QBluetoothLocalDevice::deviceConnected,
+//            this,           &cBleDevice::DeviceDisconnected);
 
 //    connect(m_LocalDevice,
 //            SIGNAL(pairingFinished(QBluetoothAddress,QBluetoothLocalDevice::Pairing))

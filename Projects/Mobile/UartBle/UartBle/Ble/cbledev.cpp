@@ -6,6 +6,17 @@ cBleDev::cBleDev(QObject *parent) : QObject(parent)
 
     connect(m_BleDiscoveryAgent,  &cBleDiscoveryDevicesAgent::eventSignal,
             this,           &cBleDev::slotDiscoveryAgentEventHandler);
+
+    // настройка слотов BLE устройства
+    connect(&m_CurrentDevice,  &QBluetoothLocalDevice::pairingFinished ,
+            this,           &cBleDev::slotPairingFinished);
+    connect(&m_CurrentDevice,  &QBluetoothLocalDevice::deviceConnected,
+            this,           &cBleDev::slotDeviceConnected);
+    connect(&m_CurrentDevice,  &QBluetoothLocalDevice::deviceConnected,
+            this,           &cBleDev::slotDeviceDisconnected);
+//    connect(m_LocalDevice,
+//            SIGNAL(pairingFinished(QBluetoothAddress,QBluetoothLocalDevice::Pairing))
+//            ,this, SLOT(pairingDone(QBluetoothAddress,QBluetoothLocalDevice::Pairing)));
 }
 // ----------------------------------------------------------------------------
 void cBleDev::StartFindDevices(void)
@@ -16,7 +27,9 @@ void cBleDev::StartFindDevices(void)
 // ----------------------------------------------------------------------------
 void cBleDev::SetDeviceByAddress(const QString &address)
 {
+    m_BleDiscoveryAgent->StopDiscovery();
     m_CurrentDevInfo = m_BleDiscoveryAgent->GetDeviceInfoByAddress(address);
+    m_CurrentDevice.requestPairing(m_CurrentDevInfo.address(), QBluetoothLocalDevice::Paired);
 }
 // ----------------------------------------------------------------------------
 void cBleDev::slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e)
@@ -47,3 +60,37 @@ void cBleDev::slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Ev
     }
 }
 // ----------------------------------------------------------------------------
+void cBleDev::slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing)
+{
+//    QString text;
+
+//    text.append("m_LocalDevice PairingFinished:");
+//    switch (pairing)
+//    {
+//        case QBluetoothLocalDevice::Pairing::AuthorizedPaired:
+//            text.append(" AuthorizedPaired; ");
+//            break;
+//        case QBluetoothLocalDevice::Pairing::Paired:
+//            text.append(" Paired; ");
+//            break;
+//        case QBluetoothLocalDevice::Pairing::Unpaired:
+//            text.append(" Unpaired; ");
+//            break;
+//        default:
+//            break;
+//    }
+//    text.append(address.toString());
+//    printNameOfDevice(text);
+}
+void cBleDev::slotDeviceConnected(const QBluetoothAddress &address)
+{
+//    printNameOfDevice("m_LocalDevice DeviceConnected: " + address.toString());
+
+//    SetupLowEnergyController(address);
+
+//    m_control->connectToDevice();
+}
+void cBleDev::slotDeviceDisconnected(const QBluetoothAddress &address)
+{
+//    printNameOfDevice("m_LocalDevice DeviceDisconnected: " + address.toString());
+}

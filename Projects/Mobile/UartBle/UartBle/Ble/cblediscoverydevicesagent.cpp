@@ -28,6 +28,11 @@ void cBleDiscoveryDevicesAgent::StartDiscovery()
     m_DevsDicoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 }
 // ----------------------------------------------------------------------------
+void cBleDiscoveryDevicesAgent::StopDiscovery()
+{
+    m_DevsDicoveryAgent->stop();
+}
+// ----------------------------------------------------------------------------
 QMap<QString, QString> cBleDiscoveryDevicesAgent::GetFindingDevices()
 {
     QMap<QString, QString> result;
@@ -56,15 +61,6 @@ QBluetoothDeviceInfo cBleDiscoveryDevicesAgent::GetDeviceInfoByAddress(const QSt
             dev_info = *it;
         }
     }
-    return dev_info;
-}
-// ----------------------------------------------------------------------------
-QBluetoothDeviceInfo GetDeviceInfoByAddress(const QString &address)
-{
-    QBluetoothDeviceInfo dev_info;
-
-
-
     return dev_info;
 }
 // ----------------------------------------------------------------------------
