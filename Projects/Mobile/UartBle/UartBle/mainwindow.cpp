@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->listWidget, SIGNAL(itemPressed(QListWidgetItem*)),
             this, SLOT(ListWidgetDeviceSelected(QListWidgetItem*)));
+
+    m_BleDevTest = new cBleDev();
+    m_BleDevTest->StartFindDevices();
 }
 // -----------------------------------------------------------------------------
 MainWindow::~MainWindow()

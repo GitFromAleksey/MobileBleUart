@@ -4,16 +4,17 @@ cBleDev::cBleDev(QObject *parent) : QObject(parent)
 {
     m_BleDiscoveryAgent = new cBleDiscoveryDevicesAgent(this);
 
-//    connect(m_BleDiscoveryAgent,  &m_BleDiscoveryAgent->SendEvent,
-//            this,           &cBleDevice::DeviceDisconnected);
+    connect(m_BleDiscoveryAgent,  &cBleDiscoveryDevicesAgent::eventSignal,
+            this,           &cBleDev::DiscoveryAgentEventHandler);
 }
 // ----------------------------------------------------------------------------
 void cBleDev::StartFindDevices(void)
 {
-
+    if(m_BleDiscoveryAgent)
+        m_BleDiscoveryAgent->StartDiscovery();
 }
 // ----------------------------------------------------------------------------
-void cBleDev::DiscoveryAgentEventHandler(cBleDiscoveryDevicesAgent::Events &e)
+void cBleDev::DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e)
 {
     switch (e)
     {

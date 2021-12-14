@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <qlistwidget.h>
 #include "Ble/cbledevice_old.h"
+#include "Ble/cbledev.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +27,7 @@ private slots:
 
 private:
     cBleDevice m_ble;
+    cBleDev *m_BleDevTest;
     Ui::MainWindow *ui;
 
 };

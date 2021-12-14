@@ -20,8 +20,6 @@ public:
 
     explicit cBleDiscoveryDevicesAgent(QObject *parent = nullptr);
 
-    void SetEventsCallBack(void (*eventCalback)(const Events &e));
-
     void StartDiscovery();
 
 private slots:
@@ -36,9 +34,6 @@ private:
     QBluetoothDeviceDiscoveryAgent *m_DevsDicoveryAgent;
     QList<QBluetoothDeviceInfo> m_DevicesList;
 
-    void (*eventCalback)(const Events &e);
-
-    void SendEvent(const Events &e);
 };
 
 #endif // CBLEDISCOVERYDEVICESAGENT_H

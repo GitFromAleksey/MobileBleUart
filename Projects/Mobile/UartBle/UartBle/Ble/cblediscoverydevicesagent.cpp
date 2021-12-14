@@ -3,8 +3,7 @@
 
 cBleDiscoveryDevicesAgent::cBleDiscoveryDevicesAgent(QObject *parent) :
     QObject(parent),
-    m_DevsDicoveryAgent(nullptr),
-    eventCalback(nullptr)
+    m_DevsDicoveryAgent(nullptr)
 {
     m_DevsDicoveryAgent = new QBluetoothDeviceDiscoveryAgent();
     m_DevsDicoveryAgent->setLowEnergyDiscoveryTimeout(10000);
@@ -15,25 +14,10 @@ cBleDiscoveryDevicesAgent::cBleDiscoveryDevicesAgent(QObject *parent) :
             this, &cBleDiscoveryDevicesAgent::DeviceUpdated);
     connect(m_DevsDicoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
             this, &cBleDiscoveryDevicesAgent::Finished);
-//    connect(m_DevsDicoveriAgent, &QBluetoothDeviceDiscoveryAgent::error,
+//    connect(m_DevsDicoveryAgent, &QBluetoothDeviceDiscoveryAgent::error, // TODO что-то не так нужно разобраться
 //            this, &cBleDiscoveryDevicesAgent::Error);
     connect(m_DevsDicoveryAgent, &QBluetoothDeviceDiscoveryAgent::canceled,
             this, &cBleDiscoveryDevicesAgent::Canceled);
-}
-// ----------------------------------------------------------------------------
-void cBleDiscoveryDevicesAgent::SetEventsCallBack(void (*eventCalback)(const Events &e))
-{
-    this->eventCalback = eventCalback;
-}
-// ----------------------------------------------------------------------------
-void cBleDiscoveryDevicesAgent::SendEvent(const Events &e)
-{
-    if(this->eventCalback == nullptr)
-        return;
-
-    this->eventCalback(e);
-
-    eventSignal(e);
 }
 // ----------------------------------------------------------------------------
 void cBleDiscoveryDevicesAgent::StartDiscovery()
@@ -44,6 +28,7 @@ void cBleDiscoveryDevicesAgent::StartDiscovery()
     m_DevsDicoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 }
 // ----------------------------------------------------------------------------
+// Обнаружено устройство
 void cBleDiscoveryDevicesAgent::DeviceDiscovered(const QBluetoothDeviceInfo &info)
 {
     // If device is LowEnergy-device, add it to the list
@@ -55,29 +40,28 @@ void cBleDiscoveryDevicesAgent::DeviceDiscovered(const QBluetoothDeviceInfo &inf
 
         m_DevicesList.append(info);
 
-        SendEvent(e_DiscoveredNewDevice);
+        emit eventSignal(e_DiscoveredNewDevice);
     }
 }
 // ----------------------------------------------------------------------------
 void cBleDiscoveryDevicesAgent::DeviceUpdated(const QBluetoothDeviceInfo &info,
                                               QBluetoothDeviceInfo::Fields updatedFields)
 {
-    SendEvent(e_deviceUpdated);
+    emit eventSignal(e_deviceUpdated);
 }
 // ----------------------------------------------------------------------------
 void cBleDiscoveryDevicesAgent::Finished()
 {
-//printNameOfDevice("Scan Finished");
-    SendEvent(e_DiscoverFinished);
+    emit eventSignal(e_DiscoverFinished);
 }
 // ----------------------------------------------------------------------------
 void cBleDiscoveryDevicesAgent::Error(QBluetoothDeviceDiscoveryAgent::Error error)
 {
-    SendEvent(e_DiscoverError);
+    emit eventSignal(e_DiscoverError);
 }
 // ----------------------------------------------------------------------------
 void cBleDiscoveryDevicesAgent::Canceled()
 {
-    SendEvent(e_DiscoverCanceled);
+    emit eventSignal(e_DiscoverCanceled);
 }
 // ----------------------------------------------------------------------------

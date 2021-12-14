@@ -20,7 +20,7 @@ public:
 
 private slots:
 
-    void DiscoveryAgentEventHandler(cBleDiscoveryDevicesAgent::Events &e);
+    void DiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e);
 
 signals:
 
