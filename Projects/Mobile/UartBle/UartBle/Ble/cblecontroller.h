@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtBluetooth/QLowEnergyController>
+#include "Ble/cbleservice.h"
 
 class cBleController : public QObject
 {
@@ -22,6 +23,7 @@ public slots:
 private:
     QLowEnergyController *m_BleController;
     bool m_IsBleControllerSetup;
+    cBleService *m_Service;
 
     void ControllerSetup();
 

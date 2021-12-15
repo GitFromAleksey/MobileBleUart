@@ -14,6 +14,7 @@ SOURCES += \
     Ble/cbledev.cpp \
     Ble/cbledevice_old.cpp \
     Ble/cblediscoverydevicesagent.cpp \
+    Ble/cbleservice.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -22,6 +23,7 @@ HEADERS += \
     Ble/cbledev.h \
     Ble/cbledevice_old.h \
     Ble/cblediscoverydevicesagent.h \
+    Ble/cbleservice.h \
     mainwindow.h
 
 FORMS += \

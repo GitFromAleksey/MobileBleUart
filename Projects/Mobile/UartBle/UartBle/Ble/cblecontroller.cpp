@@ -10,8 +10,8 @@ cBleController::cBleController(QObject *parent) :
 
 void cBleController::ControllerSetup()
 {
-//    if(m_BleController == nullptr)
-//        return;
+    if(m_BleController == nullptr)
+        return;
 
     if(m_IsBleControllerSetup)
         return;
@@ -43,8 +43,8 @@ void cBleController::ControllerSetup()
 
 void cBleController::SetBleDevice(const QBluetoothDeviceInfo &info)
 {
-    QString ad = info.address().toString();
-    m_BleController->QLowEnergyController::createCentral(info);
+//    QString ad = info.address().toString();
+    m_BleController = QLowEnergyController::createCentral(info);
     ControllerSetup();
     m_BleController->connectToDevice();
 }
@@ -147,8 +147,8 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
     else if(newService == QBluetoothUuid(QBluetoothUuid::ContinuousGlucoseMonitoring)){printNameOfDevice("ContinuousGlucoseMonitoring");}//0x181f
     else
     {
-//        printNameOfDevice("Unknown service! DiscoverDetails...");
-//        m_service = m_control->createServiceObject(newService);
+        printNameOfDevice("Unknown service! DiscoverDetails...");
+        m_Service = new cBleService(nullptr, m_BleController->createServiceObject(newService));
 
 //        connect(m_service, &QLowEnergyService::stateChanged, this, &cBleDevice::ServiceStateChanged);
 //        connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleDevice::CharacteristicWritten);
@@ -163,7 +163,7 @@ void cBleController::slotServiceDiscoveryFinished()
 
 }
 
-
+// TODO тестовая функция
 void cBleController::printNameOfDevice(const QString &text)
 {
 

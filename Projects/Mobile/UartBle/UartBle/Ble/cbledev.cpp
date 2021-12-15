@@ -87,7 +87,7 @@ void cBleDev::slotDeviceConnected(const QBluetoothAddress &address)
 //    printNameOfDevice("m_LocalDevice DeviceConnected: " + address.toString());
 
     if(m_CurrentDevInfo.address() == address)
-
+//        m_BleController.SetBleDevice(m_BleDiscoveryAgent->GetDeviceInfoByAddress(address.toString()));
         m_BleController.SetBleDevice(m_CurrentDevInfo);
 
 //    m_control->connectToDevice();
