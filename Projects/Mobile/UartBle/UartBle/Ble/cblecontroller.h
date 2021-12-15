@@ -14,6 +14,7 @@ public:
     void SetBleDevice(const QBluetoothDeviceInfo &info);
 
 signals:
+    void signalLog(const QString &text);
 
 public slots:
     // QLowEnergyController slots

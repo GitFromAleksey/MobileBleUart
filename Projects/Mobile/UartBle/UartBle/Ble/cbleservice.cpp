@@ -17,21 +17,21 @@ void cBleService::StateChanged(QLowEnergyService::ServiceState newState)
     QList<QLowEnergyCharacteristic> hrChar;
     QString tmp_string = "";
 
-//    printNameOfDevice("ServiceStateChanged ServiceState:");
+    printNameOfDevice("cBleService::StateChanged:");
     switch (newState)
     {
     case QLowEnergyService::InvalidService:
-//        printNameOfDevice(" InvalidService");
+        printNameOfDevice(" InvalidService");
         break;
     case QLowEnergyService::DiscoveryRequired:  // we know start/end handle but nothing more
-//        printNameOfDevice(" DiscoveryRequired");
+        printNameOfDevice(" DiscoveryRequired");
         break;
     //TODO Rename DiscoveringServices -> DiscoveringDetails or DiscoveringService
     case QLowEnergyService::DiscoveringServices:// discoverDetails() called and running
-//        printNameOfDevice(" DiscoveringServices");
+        printNameOfDevice(" DiscoveringServices");
         break;
     case QLowEnergyService::ServiceDiscovered:  // all details have been synchronized
-//        printNameOfDevice(" ServiceDiscovered");
+        printNameOfDevice(" ServiceDiscovered");
 
         hrChar = m_service->characteristics();
         for(auto it = hrChar.begin(); it != hrChar.end(); ++it)
@@ -39,28 +39,28 @@ void cBleService::StateChanged(QLowEnergyService::ServiceState newState)
 //            if(it->isValid())
             QLowEnergyDescriptor m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
 
-//            printNameOfDevice("service name: " + it->name() + "; uuid: " + it->uuid().toString());
+            printNameOfDevice(" Service name: " + it->name() + "; uuid: " + it->uuid().toString());
 
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Unknown)
-                    printNameOfDevice("Property Unknown");
+                    printNameOfDevice("  Property Unknown");
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Broadcasting)
-                    printNameOfDevice("Property Broadcasting");
+                    printNameOfDevice("  Property Broadcasting");
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteNoResponse)
-                    printNameOfDevice("Property WriteNoResponse");
+                    printNameOfDevice("  Property WriteNoResponse");
 
 
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Indicate)
-                    printNameOfDevice("Property Indicate");
+                    printNameOfDevice("  Property Indicate");
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteSigned)
-                    printNameOfDevice("Property WriteSigned");
+                    printNameOfDevice("  Property WriteSigned");
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::ExtendedProperty)
-                    printNameOfDevice("Property ExtendedProperty");
+                    printNameOfDevice("  Property ExtendedProperty");
 
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Read)
                 {
                     m_ReadCharacteristic = *it;
                     tmp_string = "";
-                    tmp_string.append("Property Read uuid: ");
+                    tmp_string.append("  Property Read uuid: ");
                     tmp_string.append(m_ReadCharacteristic.uuid().toString());
                     printNameOfDevice(tmp_string);
                 }
@@ -80,8 +80,10 @@ void cBleService::StateChanged(QLowEnergyService::ServiceState newState)
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Write)
                 {
                     m_WriteCharacteristic = *it;
-                    printNameOfDevice("Property Write");
-
+                    tmp_string = "";
+                    tmp_string.append("  Property Write uuid: ");
+                    tmp_string.append(m_WriteCharacteristic.uuid().toString());
+                    printNameOfDevice(tmp_string);
 //                    m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
 
 //                    if(m_NotificationDesc.isValid())
@@ -101,14 +103,17 @@ void cBleService::StateChanged(QLowEnergyService::ServiceState newState)
                     // TODO что за 0100? я так и не разобрался
                     m_service->writeDescriptor(m_NotificationDesc, QByteArray::fromHex("0100"));
 
-                    printNameOfDevice("Property Notify");
+                    tmp_string = "";
+                    tmp_string.append("  Property Notify uuid: ");
+                    tmp_string.append(m_ReadCharacteristic.uuid().toString());
+                    printNameOfDevice(tmp_string);
                 }
 //                m_service->writeDescriptor()
         }
 
         break;
     case QLowEnergyService::LocalService:
-//        printNameOfDevice(" LocalService");
+        printNameOfDevice(" LocalService");
         break;
     default:
 //        printNameOfDevice(";");
@@ -133,6 +138,6 @@ void cBleService::CharacteristicChanged(const QLowEnergyCharacteristic &info,
 // TODO тестовый метод
 void cBleService::printNameOfDevice(const QString &text)
 {
-
+    emit signalLog(text);
 }
 

@@ -12,6 +12,7 @@ public:
     explicit cBleService(QObject *parent = nullptr, QLowEnergyService *service = nullptr);
 
 signals:
+    void signalLog(const QString &text);
 
 public slots:
 //    connect(m_service, &QLowEnergyService::stateChanged, this, &cBleService::ServiceStateChanged);

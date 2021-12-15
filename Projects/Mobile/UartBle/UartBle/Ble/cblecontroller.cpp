@@ -47,6 +47,7 @@ void cBleController::SetBleDevice(const QBluetoothDeviceInfo &info)
     m_BleController = QLowEnergyController::createCentral(info);
     ControllerSetup();
     m_BleController->connectToDevice();
+    emit signalLog("cBleController::SetBleDevice: connectToDevice: " + info.address().toString());
 }
 
 void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
@@ -150,6 +151,9 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
         printNameOfDevice("Unknown service! DiscoverDetails...");
         m_Service = new cBleService(nullptr, m_BleController->createServiceObject(newService));
 
+        connect(m_Service, &cBleService::signalLog,
+                this, &cBleController::signalLog);
+
 //        connect(m_service, &QLowEnergyService::stateChanged, this, &cBleDevice::ServiceStateChanged);
 //        connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleDevice::CharacteristicWritten);
 //        connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleDevice::DescriptorRead);
@@ -160,11 +164,11 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
 }
 void cBleController::slotServiceDiscoveryFinished()
 {
-
+    emit signalLog("cBleController::slotServiceDiscoveryFinished");
 }
 
 // TODO тестовая функция
 void cBleController::printNameOfDevice(const QString &text)
 {
-
+    emit signalLog(text);
 }

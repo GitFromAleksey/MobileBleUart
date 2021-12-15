@@ -19,7 +19,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+public slots:
 
     void on_pushButton_clicked();
     void ListWidgetDeviceSelected(QListWidgetItem* item);
@@ -29,6 +29,7 @@ private slots:
     void slotPrintNewDeviceInfo(const QString name, const QString address);
     void on_pushButtonConnect_clicked();
 
+    void slotLog(const QString &text);
 private:
     cBleDevice m_ble;
     cBleDev *m_BleDevTest;

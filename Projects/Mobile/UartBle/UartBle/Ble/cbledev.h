@@ -22,6 +22,7 @@ public:
 
     void StartFindDevices(void);
     void SetDeviceByAddress(const QString &address);
+    void Disconnect();
 
 private slots:
 
@@ -32,9 +33,11 @@ private slots:
     void slotDeviceDisconnected(const QBluetoothAddress &address);
     void slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing);
 
+    void slotLog(const QString &text);
 signals:
 
     void signalSendNewDeviceInfo(const QString name, const QString address);
+    void signalLog(const QString &text);
 
 private:
     cBleDiscoveryDevicesAgent *m_BleDiscoveryAgent;

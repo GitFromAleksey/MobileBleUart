@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_BleDevTest = new cBleDev();
     connect(m_BleDevTest, &cBleDev::signalSendNewDeviceInfo,
             this, &MainWindow::slotPrintNewDeviceInfo);
+    connect(m_BleDevTest, &cBleDev::signalLog,
+            this, &MainWindow::slotLog);
 }
 // -----------------------------------------------------------------------------
 MainWindow::~MainWindow()
@@ -43,8 +45,9 @@ void MainWindow::on_pushButton_clicked() // сканирование BLE уст�
 // -----------------------------------------------------------------------------
 void MainWindow::on_pushButton_2_clicked() // отправка сообщения по BLE
 {
-    m_ble.SendMessage("hello from mobile!\n");
+//    m_ble.SendMessage("hello from mobile!\n");
 //    ui->textBrowser_log->append("hello from mobile!");
+    m_BleDevTest->Disconnect();
 }
 
 void MainWindow::ListWidgetDeviceSelected(QListWidgetItem* item)
@@ -82,7 +85,10 @@ void ClearDeviceList()
     p_ui->listWidgetDevNames->clear();
     p_ui->textBrowser->clear();
 }
-
-
+// -----------------------------------------------------------------------------
+void MainWindow::slotLog(const QString &text)
+{
+    ui->textBrowser_log->append(text);
+}
 
 
