@@ -11,6 +11,10 @@ class cBleService : public QObject
 public:
     explicit cBleService(QObject *parent = nullptr, QLowEnergyService *service = nullptr);
 
+    void SendMessage(const QString &text);
+
+    void TransmitBleData(const QByteArray &data);
+
 signals:
     void signalLog(const QString &text);
 
@@ -19,18 +23,20 @@ public slots:
 //    connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleService::CharacteristicWritten);
 //    connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleService::DescriptorRead);
 //    connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleService::CharacteristicChanged);
-    void StateChanged(QLowEnergyService::ServiceState newState);
-    void CharacteristicChanged(const QLowEnergyCharacteristic &info,
+    void slotStateChanged(QLowEnergyService::ServiceState newState);
+    void slotCharacteristicChanged(const QLowEnergyCharacteristic &info,
                                const QByteArray &value);
 //    void characteristicRead(const QLowEnergyCharacteristic &info,
 //                            const QByteArray &value);
-    void CharacteristicWritten(const QLowEnergyCharacteristic &info,
+    void slotCharacteristicWritten(const QLowEnergyCharacteristic &info,
                                const QByteArray &value);
-    void DescriptorRead(const QLowEnergyDescriptor &info,
+    void slotDescriptorRead(const QLowEnergyDescriptor &info,
                         const QByteArray &value);
 //    void descriptorWritten(const QLowEnergyDescriptor &info,
 //                           const QByteArray &value);
 //    void error(QLowEnergyService::ServiceError error);
+
+
 private:
     QLowEnergyService *m_service;
     QLowEnergyCharacteristic m_ReadCharacteristic;

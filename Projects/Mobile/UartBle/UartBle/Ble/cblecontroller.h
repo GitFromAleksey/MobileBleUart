@@ -11,7 +11,10 @@ class cBleController : public QObject
 public:
     explicit cBleController(QObject *parent = nullptr);
 
-    void SetBleDevice(const QBluetoothDeviceInfo &info);
+    void ConnectBleDevice(const QBluetoothDeviceInfo &info);
+    void DisconnectBleDevice();
+
+    void TransmitBleData(const QByteArray &data);
 
 signals:
     void signalLog(const QString &text);

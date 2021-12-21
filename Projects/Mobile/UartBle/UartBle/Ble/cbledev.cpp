@@ -31,16 +31,21 @@ void cBleDev::StartFindDevices(void)
     }
 }
 // ----------------------------------------------------------------------------
-void cBleDev::SetDeviceByAddress(const QString &address)
+void cBleDev::Connect(const QString &address)
 {
+//    m_BleDiscoveryAgent->StopDiscovery();
+//    m_CurrentDevInfo = m_BleDiscoveryAgent->GetDeviceInfoByAddress(address);
+//    m_CurrentDevice.requestPairing(m_CurrentDevInfo.address(), QBluetoothLocalDevice::Paired);
+
     m_BleDiscoveryAgent->StopDiscovery();
     m_CurrentDevInfo = m_BleDiscoveryAgent->GetDeviceInfoByAddress(address);
-    m_CurrentDevice.requestPairing(m_CurrentDevInfo.address(), QBluetoothLocalDevice::Paired);
+    m_BleController.ConnectBleDevice(m_CurrentDevInfo);
 }
 // ----------------------------------------------------------------------------
 void cBleDev::Disconnect()
 {
     m_CurrentDevice.requestPairing(m_CurrentDevInfo.address(), QBluetoothLocalDevice::Unpaired);
+    m_BleController.DisconnectBleDevice();
 }
 // ----------------------------------------------------------------------------
 void cBleDev::slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Events &e)
@@ -51,20 +56,21 @@ void cBleDev::slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Ev
     switch (e)
     {
         case cBleDiscoveryDevicesAgent::Events::e_deviceUpdated:
-
+//            emit signalLog("cBleDev::slotDiscoveryAgentEventHandler: e_deviceUpdated");
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoveredNewDevice:
             m_BleDiscoveryAgent->GetLastFindingDevice(name, address);
             signalSendNewDeviceInfo(name, address);
+            emit signalLog("cBleDev::slotDiscoveryAgentEventHandler: e_DiscoveredNewDevice");
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverFinished:
-
+            emit signalLog("cBleDev::slotDiscoveryAgentEventHandler: e_DiscoverFinished");
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverCanceled:
-
+            emit signalLog("cBleDev::slotDiscoveryAgentEventHandler: e_DiscoverCanceled");
             break;
         case cBleDiscoveryDevicesAgent::Events::e_DiscoverError:
-
+            emit signalLog("cBleDev::slotDiscoveryAgentEventHandler: e_DiscoverError");
             break;
         default:
             break;
@@ -79,6 +85,7 @@ void cBleDev::slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevi
             emit signalLog("cBleDev::slotPairingFinished: AuthorizedPaired: " + address.toString());
             break;
         case QBluetoothLocalDevice::Pairing::Paired:
+//            m_BleController.SetBleDevice(m_CurrentDevInfo);
             emit signalLog("cBleDev::slotPairingFinished: Paired: " + address.toString());
             break;
         case QBluetoothLocalDevice::Pairing::Unpaired:
@@ -88,20 +95,28 @@ void cBleDev::slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevi
             break;
     }
 }
+// ----------------------------------------------------------------------------
 void cBleDev::slotDeviceConnected(const QBluetoothAddress &address)
 {
-    if(m_CurrentDevInfo.address() == address)
-    {
-        emit signalLog("cBleDev::slotDeviceConnected: " + address.toString());
-        m_BleController.SetBleDevice(m_CurrentDevInfo);
-    }
+//    if(m_CurrentDevInfo.address() == address)
+//    {
+//        emit signalLog("cBleDev::slotDeviceConnected: " + address.toString());
+//        m_BleController.SetBleDevice(m_CurrentDevInfo);
+//    }
 }
+// ----------------------------------------------------------------------------
 void cBleDev::slotDeviceDisconnected(const QBluetoothAddress &address)
 {
     emit signalLog("cBleDev::slotDeviceDisconnected: " + address.toString());
 }
-
+// ----------------------------------------------------------------------------
+void cBleDev::TransmitBleData(const QByteArray &data)
+{
+    m_BleController.TransmitBleData(data);
+}
+// ----------------------------------------------------------------------------
 void cBleDev::slotLog(const QString &text)
 {
     emit signalLog(text);
 }
+// ----------------------------------------------------------------------------

@@ -70,7 +70,7 @@ void MainWindow::slotPrintNewDeviceInfo(const QString name, const QString addres
 // -----------------------------------------------------------------------------
 void MainWindow::on_pushButtonConnect_clicked()
 {
-    m_BleDevTest->SetDeviceByAddress(m_cur_dev_addr);
+    m_BleDevTest->Connect(m_cur_dev_addr);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -90,5 +90,11 @@ void MainWindow::slotLog(const QString &text)
 {
     ui->textBrowser_log->append(text);
 }
+// -----------------------------------------------------------------------------
+void MainWindow::on_pushButtonConnect_2_clicked()
+{
+    QString s = ui->textEdit_send->toPlainText();
 
+    m_BleDevTest->TransmitBleData(s.toLocal8Bit());
+}
 

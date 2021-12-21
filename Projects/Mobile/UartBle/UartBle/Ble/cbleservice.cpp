@@ -1,18 +1,19 @@
 #include "cbleservice.h"
 
+// ----------------------------------------------------------------------------
 cBleService::cBleService(QObject *parent, QLowEnergyService *service) :
     QObject(parent),
     m_service(service)
 {
-    connect(m_service, &QLowEnergyService::stateChanged, this, &cBleService::StateChanged);
-    connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleService::CharacteristicWritten);
-    connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleService::DescriptorRead);
-    connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleService::CharacteristicChanged);
+    connect(m_service, &QLowEnergyService::stateChanged, this, &cBleService::slotStateChanged);
+    connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleService::slotCharacteristicWritten);
+    connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleService::slotDescriptorRead);
+    connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleService::slotCharacteristicChanged);
 
     m_service->discoverDetails();
 }
-
-void cBleService::StateChanged(QLowEnergyService::ServiceState newState)
+// ----------------------------------------------------------------------------
+void cBleService::slotStateChanged(QLowEnergyService::ServiceState newState)
 {
     QList<QLowEnergyCharacteristic> hrChar;
     QString tmp_string = "";
@@ -120,24 +121,57 @@ void cBleService::StateChanged(QLowEnergyService::ServiceState newState)
         break;
     }
 }
-void cBleService::CharacteristicWritten(const QLowEnergyCharacteristic &info,
-                           const QByteArray &value)
+// ----------------------------------------------------------------------------
+void cBleService::slotCharacteristicWritten(const QLowEnergyCharacteristic &info,
+                                            const QByteArray &value)
 {
+    QString s = "";
 
+    s.append(info.uuid().toString());
+    s.append(QString(value));
+
+    printNameOfDevice(s);
 }
-void cBleService::DescriptorRead(const QLowEnergyDescriptor &info,
-                    const QByteArray &value)
+// ----------------------------------------------------------------------------
+void cBleService::slotDescriptorRead(const QLowEnergyDescriptor &info,
+                                     const QByteArray &value)
 {
+    QString s = "";
 
+    s.append(info.uuid().toString());
+    s.append(QString(value));
+
+    printNameOfDevice(s);
 }
-void cBleService::CharacteristicChanged(const QLowEnergyCharacteristic &info,
-                           const QByteArray &value)
+// ----------------------------------------------------------------------------
+void cBleService::slotCharacteristicChanged(const QLowEnergyCharacteristic &info,
+                                            const QByteArray &value)
 {
+    QString s = "";
 
+    s.append(info.name());
+    s.append(info.uuid().toString());
+    s.append("; ");
+    s.append(QString(value));
+
+    emit signalLog(s);
 }
+// ----------------------------------------------------------------------------
+void cBleService::SendMessage(const QString &text)
+{
+    QByteArray array = text.toLocal8Bit();
+
+//    m_service->writeCharacteristic(m_WriteCharacteristic, array, QLowEnergyService::WriteWithoutResponse);
+    m_service->writeCharacteristic(m_WriteCharacteristic, array, QLowEnergyService::WriteWithResponse);
+}
+void cBleService::TransmitBleData(const QByteArray &data)
+{
+    m_service->writeCharacteristic(m_WriteCharacteristic, data, QLowEnergyService::WriteWithResponse);
+}
+// ----------------------------------------------------------------------------
 // TODO тестовый метод
 void cBleService::printNameOfDevice(const QString &text)
 {
     emit signalLog(text);
 }
-
+// ----------------------------------------------------------------------------

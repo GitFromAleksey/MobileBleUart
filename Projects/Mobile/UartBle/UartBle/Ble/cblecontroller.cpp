@@ -7,7 +7,7 @@ cBleController::cBleController(QObject *parent) :
 {
 
 }
-
+// ----------------------------------------------------------------------------
 void cBleController::ControllerSetup()
 {
     if(m_BleController == nullptr)
@@ -40,8 +40,8 @@ void cBleController::ControllerSetup()
 
     m_IsBleControllerSetup = true;
 }
-
-void cBleController::SetBleDevice(const QBluetoothDeviceInfo &info)
+// ----------------------------------------------------------------------------
+void cBleController::ConnectBleDevice(const QBluetoothDeviceInfo &info)
 {
 //    QString ad = info.address().toString();
     m_BleController = QLowEnergyController::createCentral(info);
@@ -49,7 +49,14 @@ void cBleController::SetBleDevice(const QBluetoothDeviceInfo &info)
     m_BleController->connectToDevice();
     emit signalLog("cBleController::SetBleDevice: connectToDevice: " + info.address().toString());
 }
-
+void cBleController::DisconnectBleDevice()
+{
+    if(m_BleController)
+    {
+        m_BleController->disconnectFromDevice();
+    }
+}
+// ----------------------------------------------------------------------------
 void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
 {
     printNameOfDevice("- ServiceDiscovered:" + newService.toString() + ";");
@@ -154,21 +161,22 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
         connect(m_Service, &cBleService::signalLog,
                 this, &cBleController::signalLog);
 
-//        connect(m_service, &QLowEnergyService::stateChanged, this, &cBleDevice::ServiceStateChanged);
-//        connect(m_service, &QLowEnergyService::characteristicWritten, this, &cBleDevice::CharacteristicWritten);
-//        connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleDevice::DescriptorRead);
-//        connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleDevice::CharacteristicChanged);
-
-//        m_service->discoverDetails();
     }
 }
+// ----------------------------------------------------------------------------
+void cBleController::TransmitBleData(const QByteArray &data)
+{
+    m_Service->TransmitBleData(data);
+}
+// ----------------------------------------------------------------------------
 void cBleController::slotServiceDiscoveryFinished()
 {
     emit signalLog("cBleController::slotServiceDiscoveryFinished");
 }
-
+// ----------------------------------------------------------------------------
 // TODO тестовая функция
 void cBleController::printNameOfDevice(const QString &text)
 {
     emit signalLog(text);
 }
+// ----------------------------------------------------------------------------

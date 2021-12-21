@@ -30,6 +30,9 @@ public slots:
     void on_pushButtonConnect_clicked();
 
     void slotLog(const QString &text);
+private slots:
+    void on_pushButtonConnect_2_clicked();
+
 private:
     cBleDevice m_ble;
     cBleDev *m_BleDevTest;

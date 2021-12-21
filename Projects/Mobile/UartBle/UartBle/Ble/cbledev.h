@@ -21,8 +21,10 @@ public:
     explicit cBleDev(QObject *parent = nullptr);
 
     void StartFindDevices(void);
-    void SetDeviceByAddress(const QString &address);
+    void Connect(const QString &address);
     void Disconnect();
+
+    void TransmitBleData(const QByteArray &data);
 
 private slots:
 
@@ -32,6 +34,7 @@ private slots:
     void slotDeviceConnected(const QBluetoothAddress &address);
     void slotDeviceDisconnected(const QBluetoothAddress &address);
     void slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing);
+
 
     void slotLog(const QString &text);
 signals:
