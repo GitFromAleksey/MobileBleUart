@@ -30,6 +30,7 @@ public slots:
     void on_pushButtonConnect_clicked();
 
     void slotLog(const QString &text);
+    void slotReceiveData(const QString &uuid, const QByteArray &data);
 private slots:
     void on_pushButtonConnect_2_clicked();
 

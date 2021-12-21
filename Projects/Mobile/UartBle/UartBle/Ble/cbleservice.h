@@ -17,6 +17,7 @@ public:
     void TransmitBleData(const QByteArray &data);
 
 signals:
+    void signalReceiveData(const QString &uuid, const QByteArray &data);
     void signalLog(const QString &text);
 
 public slots:

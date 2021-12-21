@@ -16,15 +16,19 @@ public:
 
     void TransmitBleData(const QByteArray &data);
 
+
     bool IsConnected() const;
 
 signals:
+
     void signalLog(const QString &text);
+    void signalReceiveData(const QString &uuid, const QByteArray &data);
 
 public slots:
     // QLowEnergyController slots
     void slotServiceDiscovered(const QBluetoothUuid &newService);
     void slotServiceDiscoveryFinished();
+//    void slotReceiveData(const QByteArray &data);
 
 private:
     QLowEnergyController *m_BleController;

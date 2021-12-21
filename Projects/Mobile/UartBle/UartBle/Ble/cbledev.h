@@ -35,9 +35,10 @@ private slots:
     void slotDeviceDisconnected(const QBluetoothAddress &address);
     void slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevice::Pairing pairing);
 
-    void slotLog(const QString &text);
+//    void slotLog(const QString &text);
 signals:
 
+    void signalReceiveBleData(const QString &uuid, const QByteArray &data);
     void signalSendNewDeviceInfo(const QString name, const QString address);
     void signalLog(const QString &text);
 

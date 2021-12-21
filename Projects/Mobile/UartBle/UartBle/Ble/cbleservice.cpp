@@ -164,7 +164,8 @@ void cBleService::slotCharacteristicChanged(const QLowEnergyCharacteristic &info
     s.append("; RX data <- ");
     s.append(QString(value));
 
-    emit signalLog(s);
+    emit signalReceiveData(info.uuid().toString(), value);
+//    emit signalLog(s);
 }
 // ----------------------------------------------------------------------------
 void cBleService::SendMessage(const QString &text)

@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::slotPrintNewDeviceInfo);
     connect(m_BleDevTest, &cBleDev::signalLog,
             this, &MainWindow::slotLog);
+
+    connect(m_BleDevTest, &cBleDev::signalReceiveBleData,
+            this, &MainWindow::slotReceiveData);
 }
 // -----------------------------------------------------------------------------
 MainWindow::~MainWindow()
@@ -89,6 +92,10 @@ void ClearDeviceList()
 void MainWindow::slotLog(const QString &text)
 {
     ui->textBrowser_log->append(text);
+}
+void MainWindow::slotReceiveData(const QString &uuid, const QByteArray &data)
+{
+    ui->textBrowser_log->append("RX: uuid:" + uuid + "; data: " + QString(data));
 }
 // -----------------------------------------------------------------------------
 void MainWindow::on_pushButtonConnect_2_clicked()

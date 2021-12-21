@@ -175,7 +175,8 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
 
         connect(m_Service, &cBleService::signalLog,
                 this, &cBleController::signalLog);
-
+        connect(m_Service, &cBleService::signalReceiveData,
+                this, &cBleController::signalReceiveData);
     }
 }
 // ----------------------------------------------------------------------------
@@ -232,4 +233,9 @@ void cBleController::printNameOfDevice(const QString &text)
 {
     emit signalLog(text);
 }
+// ----------------------------------------------------------------------------
+//void cBleController::slotReceiveData(const QByteArray &data)
+//{
+//    emit signalReceiveData(data);
+//}
 // ----------------------------------------------------------------------------

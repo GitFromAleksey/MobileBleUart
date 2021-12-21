@@ -19,7 +19,10 @@ cBleDev::cBleDev(QObject *parent) : QObject(parent)
 //            ,this, SLOT(pairingDone(QBluetoothAddress,QBluetoothLocalDevice::Pairing)));
 
     connect(&m_BleController, &cBleController::signalLog,
-            this, &cBleDev::slotLog );
+            this, &cBleDev::signalLog );
+
+    connect(&m_BleController, &cBleController::signalReceiveData,
+            this, &cBleDev::signalReceiveBleData );
 }
 // ----------------------------------------------------------------------------
 void cBleDev::StartFindDevices(void)
@@ -118,8 +121,8 @@ void cBleDev::TransmitBleData(const QByteArray &data)
     m_BleController.TransmitBleData(data);
 }
 // ----------------------------------------------------------------------------
-void cBleDev::slotLog(const QString &text)
-{
-    emit signalLog(text);
-}
+//void cBleDev::slotLog(const QString &text)
+//{
+//    emit signalLog(text);
+//}
 // ----------------------------------------------------------------------------
