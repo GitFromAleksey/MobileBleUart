@@ -33,9 +33,11 @@ void cBleDev::StartFindDevices(void)
 // ----------------------------------------------------------------------------
 void cBleDev::Connect(const QString &address)
 {
-//    m_BleDiscoveryAgent->StopDiscovery();
-//    m_CurrentDevInfo = m_BleDiscoveryAgent->GetDeviceInfoByAddress(address);
-//    m_CurrentDevice.requestPairing(m_CurrentDevInfo.address(), QBluetoothLocalDevice::Paired);
+    if(m_BleController.IsConnected())
+    {
+        emit signalLog("cBleDev::Connect - device is connected");
+        return;
+    }
 
     m_BleDiscoveryAgent->StopDiscovery();
     m_CurrentDevInfo = m_BleDiscoveryAgent->GetDeviceInfoByAddress(address);
@@ -98,6 +100,7 @@ void cBleDev::slotPairingFinished(QBluetoothAddress address, QBluetoothLocalDevi
 // ----------------------------------------------------------------------------
 void cBleDev::slotDeviceConnected(const QBluetoothAddress &address)
 {
+    emit signalLog("cBleDev::slotDeviceConnected: " + address.toString());
 //    if(m_CurrentDevInfo.address() == address)
 //    {
 //        emit signalLog("cBleDev::slotDeviceConnected: " + address.toString());

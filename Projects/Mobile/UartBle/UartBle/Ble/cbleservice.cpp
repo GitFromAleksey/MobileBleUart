@@ -12,6 +12,13 @@ cBleService::cBleService(QObject *parent, QLowEnergyService *service) :
 
     m_service->discoverDetails();
 }
+cBleService::~cBleService()
+{
+    if(m_service)
+    {
+        delete m_service;
+    }
+}
 // ----------------------------------------------------------------------------
 void cBleService::slotStateChanged(QLowEnergyService::ServiceState newState)
 {
@@ -122,28 +129,31 @@ void cBleService::slotStateChanged(QLowEnergyService::ServiceState newState)
     }
 }
 // ----------------------------------------------------------------------------
+// индикация отправки данных
 void cBleService::slotCharacteristicWritten(const QLowEnergyCharacteristic &info,
                                             const QByteArray &value)
 {
     QString s = "";
 
     s.append(info.uuid().toString());
+    s.append("; TX data -> ");
     s.append(QString(value));
 
-    printNameOfDevice(s);
+    emit signalLog(s);
 }
 // ----------------------------------------------------------------------------
 void cBleService::slotDescriptorRead(const QLowEnergyDescriptor &info,
                                      const QByteArray &value)
 {
-    QString s = "";
+    QString s = "cBleService::slotDescriptorRead:";
 
     s.append(info.uuid().toString());
     s.append(QString(value));
 
-    printNameOfDevice(s);
+    emit signalLog(s);
 }
 // ----------------------------------------------------------------------------
+// приём данных
 void cBleService::slotCharacteristicChanged(const QLowEnergyCharacteristic &info,
                                             const QByteArray &value)
 {
@@ -151,7 +161,7 @@ void cBleService::slotCharacteristicChanged(const QLowEnergyCharacteristic &info
 
     s.append(info.name());
     s.append(info.uuid().toString());
-    s.append("; ");
+    s.append("; RX data <- ");
     s.append(QString(value));
 
     emit signalLog(s);
@@ -166,7 +176,14 @@ void cBleService::SendMessage(const QString &text)
 }
 void cBleService::TransmitBleData(const QByteArray &data)
 {
-    m_service->writeCharacteristic(m_WriteCharacteristic, data, QLowEnergyService::WriteWithResponse);
+    if(m_service)
+    {
+        m_service->writeCharacteristic(m_WriteCharacteristic, data, QLowEnergyService::WriteWithResponse);
+    }
+    else
+    {
+        emit signalLog("cBleService::TransmitBleData: there are no transmit services");
+    }
 }
 // ----------------------------------------------------------------------------
 // TODO тестовый метод

@@ -43,17 +43,32 @@ void cBleController::ControllerSetup()
 // ----------------------------------------------------------------------------
 void cBleController::ConnectBleDevice(const QBluetoothDeviceInfo &info)
 {
-//    QString ad = info.address().toString();
+    if(IsConnected())
+    {
+        emit signalLog("cBleController::ConnectBleDevice: device is connected: " + info.address().toString());
+        return;
+    }
+
     m_BleController = QLowEnergyController::createCentral(info);
     ControllerSetup();
     m_BleController->connectToDevice();
-    emit signalLog("cBleController::SetBleDevice: connectToDevice: " + info.address().toString());
+    emit signalLog("cBleController::ConnectBleDevice: " + info.address().toString());
 }
 void cBleController::DisconnectBleDevice()
 {
     if(m_BleController)
     {
         m_BleController->disconnectFromDevice();
+        if(m_Service)
+        {
+            delete  m_Service;
+            m_Service = nullptr;
+        }
+        delete m_BleController;
+        m_BleController = nullptr;
+
+        m_IsBleControllerSetup = false;
+        emit signalLog("cBleController::DisconnectBleDevice");
     }
 }
 // ----------------------------------------------------------------------------
@@ -167,6 +182,44 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
 void cBleController::TransmitBleData(const QByteArray &data)
 {
     m_Service->TransmitBleData(data);
+}
+// ----------------------------------------------------------------------------
+bool cBleController::IsConnected() const
+{
+    QLowEnergyController::ControllerState state;
+
+    if(!m_BleController)
+    {
+        return false;
+    }
+
+    state = m_BleController->state();
+    switch (state)
+    {
+        case QLowEnergyController::ControllerState::ConnectedState :
+            return true;
+            break;
+        case QLowEnergyController::ControllerState::ConnectingState :
+            return false;
+            break;
+        case QLowEnergyController::ControllerState::UnconnectedState :
+            return false;
+            break;
+        case QLowEnergyController::ControllerState::DiscoveringState :
+            return false;
+            break;
+        case QLowEnergyController::ControllerState::DiscoveredState :
+            return true;
+            break;
+        case QLowEnergyController::ControllerState::ClosingState :
+            return false;
+            break;
+        case QLowEnergyController::ControllerState::AdvertisingState :
+            return false;
+            break;
+        default:
+            break;
+    }
 }
 // ----------------------------------------------------------------------------
 void cBleController::slotServiceDiscoveryFinished()

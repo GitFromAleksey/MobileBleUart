@@ -16,6 +16,8 @@ public:
 
     void TransmitBleData(const QByteArray &data);
 
+    bool IsConnected() const;
+
 signals:
     void signalLog(const QString &text);
 

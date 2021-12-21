@@ -10,6 +10,7 @@ class cBleService : public QObject
     Q_OBJECT
 public:
     explicit cBleService(QObject *parent = nullptr, QLowEnergyService *service = nullptr);
+    ~cBleService();
 
     void SendMessage(const QString &text);
 
