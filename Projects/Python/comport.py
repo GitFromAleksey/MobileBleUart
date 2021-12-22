@@ -14,6 +14,7 @@ class SerialPort():
         self.aval_ports = []
         self.LoggerCallback = None
         self.write_queue = multiprocessing.Queue()
+        self.read_queue = multiprocessing.Queue()
 
     def SetLoggerCallback(self, LoggerCallback):
         ''' Установка calback функции логгера '''
@@ -24,7 +25,8 @@ class SerialPort():
         print(f'Print from {sys._getframe().f_code.co_name}')
 
     def Logger(self, info):
-        s = self.__class__.__name__ + ': ' + info
+##        s = self.__class__.__name__ + ': ' + info
+        s = info
         if self.LoggerCallback != None:
             self.LoggerCallback(s)
         else:
@@ -72,28 +74,34 @@ class SerialPort():
             self.Logger('OpenPort() Try OpenPort:' + self.using_port.port)
             self.using_port.open()
             self.Logger(str(self.using_port))
-            th_read = threading.Thread(name = 'read thread', target = self.ReadFromPort)
+            th_read = threading.Thread(name = 'read thread', target = self.ReadFromPortThread)
             th_read.start()
             th_write = threading.Thread(name = 'write thread', target = self.WritePortThread)
             th_write.start()
         except(OSError, serial.SerialException):
             self.Logger('OpenPort() Error open port:' + str(OSError))
 
-    def ReadFromPort(self):
+    def ReadFromPortThread(self):
         ''' Чтение из порта '''
-        f_name = f'{sys._getframe().f_code.co_name}():'
+        f_name = f'{sys._getframe().f_code.co_name}():' # название функции
         self.Logger(f_name + ' strart read from port')
         while self.using_port.isOpen():
-##            time.sleep(0.01)
-## TODO нужно доделать отправку данных куда-нибудь в буфер...
             data = self.using_port.read()
             if data != b'':
-                self.Logger(f_name + str(data))
+                for b in data:
+                    rx_data = bytearray(b'')
+                    self.read_queue.put(b)
+                    if b == 10 or self.read_queue.qsize() > 50: # 10 = '\n'
+                        while self.read_queue.qsize() > 0:
+                            rx_data.append(self.read_queue.get())
+                        self.Logger('\nRX: ' + str(rx_data, 'cp1252'))
+
         self.Logger(f_name + ' stop read from port:' + self.using_port.port)
         self.Logger(f_name + ' exit')
 
     def WriteData(self, data_bytes):
         ''' Запись байт данных в очередь для отправки '''
+        self.Logger('\nTX: ' + str(data_bytes))
         for d in data_bytes:
             self.write_queue.put(bytes([d]))
 
@@ -102,10 +110,9 @@ class SerialPort():
         f_name = f'{sys._getframe().f_code.co_name}():'
         self.Logger(f_name + 'start')
         while self.using_port.isOpen():
-            time.sleep(0.1) # TODO вместо паузы нужно сделать проверку, что байт отправлен
+            time.sleep(0.1)
             while self.write_queue.qsize() > 0:
                 data = self.write_queue.get()
-                self.Logger(f_name + str(data))
                 self.using_port.write(data)
         self.Logger(f_name + 'stop')
 

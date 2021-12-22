@@ -100,7 +100,7 @@ void MainWindow::slotReceiveData(const QString &uuid, const QByteArray &data)
 // -----------------------------------------------------------------------------
 void MainWindow::on_pushButtonConnect_2_clicked()
 {
-    QString s = ui->textEdit_send->toPlainText();
+    QString s = ui->textEdit_send->toPlainText() + '\n';
 
     m_BleDevTest->TransmitBleData(s.toLocal8Bit());
 }
