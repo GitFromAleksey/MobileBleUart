@@ -3,9 +3,10 @@ import time
 import serial
 import serial.tools.list_ports
 import threading
-import multiprocessing 
+import multiprocessing
+from Loggers import cDebugLogger
 
-print('import:', __name__)
+print('comport.py run as:', __name__)
 ##------------------------------------------------------------------------------
 class SerialPort():
 
@@ -26,8 +27,9 @@ class SerialPort():
 
     def Logger(self, info):
 ##        s = self.__class__.__name__ + ': ' + info
-        s = info
+        s = info.replace('\n','')
         if self.LoggerCallback != None:
+            print('LoggerCallback:' + s)
             self.LoggerCallback(s)
         else:
             print(s)
@@ -140,7 +142,7 @@ class SerialPort():
         port_list = []
         for port_name, desc, hwid in sorted(self.port_list):
             port_list.append(port_name)
-            self.Logger(port_name)
+##            self.Logger(port_name)
 
         self.Logger('GetAllPorts() - exit')
         return port_list
@@ -192,6 +194,11 @@ class SerialPort():
 ##------------------------------------------------------------------------------
 def main():
     serial_port = SerialPort()
+
+    l = cDebugLogger()
+    l.LoggingSwitch(True)
+    serial_port.SetLoggerCallback(l.Logging)
+
     print('\nПолучение всех COM портов системы:')
     serial_port.GetAllPorts()
 ##    serial_port.CheckAllPortsThread()
@@ -202,13 +209,12 @@ def main():
 
     data_bytes = b'hello from python!\n'
     serial_port.WriteData(data_bytes)
-    time.sleep(5)
-
-    
+##    time.sleep(5)
 
     while True:
         time.sleep(1)
 ##        serial_port.WriteData(data_bytes)
+        input()
 
     serial_port.ClosePort()
     print('exit main')
