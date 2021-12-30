@@ -34,10 +34,11 @@ private:
     QLowEnergyController *m_BleController;
     bool m_IsBleControllerSetup;
     cBleService *m_Service;
+    QList<cBleService*> m_ServiceList;
 
     void ControllerSetup();
 
-    void printNameOfDevice(const QString &text);
+    void PrintLog(const QString &text);
 };
 
 #endif // CBLECONTROLLER_H

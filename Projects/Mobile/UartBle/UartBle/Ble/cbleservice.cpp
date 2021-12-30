@@ -10,7 +10,7 @@ cBleService::cBleService(QObject *parent, QLowEnergyService *service) :
     connect(m_service, &QLowEnergyService::descriptorRead, this, &cBleService::slotDescriptorRead);
     connect(m_service, &QLowEnergyService::characteristicChanged, this, &cBleService::slotCharacteristicChanged);
 
-    m_service->discoverDetails();
+//    m_service->discoverDetails();
 }
 cBleService::~cBleService()
 {
@@ -18,6 +18,12 @@ cBleService::~cBleService()
     {
         delete m_service;
     }
+}
+// ----------------------------------------------------------------------------
+void cBleService::DiscoverDetails()
+{
+    if(m_service)
+        m_service->discoverDetails();
 }
 // ----------------------------------------------------------------------------
 void cBleService::slotStateChanged(QLowEnergyService::ServiceState newState)

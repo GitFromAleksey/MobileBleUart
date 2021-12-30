@@ -12,6 +12,8 @@ public:
     explicit cBleService(QObject *parent = nullptr, QLowEnergyService *service = nullptr);
     ~cBleService();
 
+    void DiscoverDetails();
+
     void SendMessage(const QString &text);
 
     void TransmitBleData(const QByteArray &data);
