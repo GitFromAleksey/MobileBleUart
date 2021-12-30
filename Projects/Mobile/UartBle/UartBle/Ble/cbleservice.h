@@ -44,7 +44,7 @@ private:
     QLowEnergyCharacteristic m_ReadCharacteristic;
     QLowEnergyCharacteristic m_WriteCharacteristic;
 
-    void printNameOfDevice(const QString &text);
+    void PrintLog(const QString &text);
 };
 
 #endif // CBLESERVICE_H

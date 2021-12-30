@@ -74,7 +74,7 @@ void cBleController::DisconnectBleDevice()
 // ----------------------------------------------------------------------------
 void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
 {
-    printNameOfDevice("- ServiceDiscovered:" + newService.toString() + ";");
+    printNameOfDevice("cBleController::ServiceDiscovered:" + newService.toString() + ":");
 
 //    if(newService == QBluetoothUuid(QBluetoothUuid::)
     if(newService == QBluetoothUuid(QBluetoothUuid::ServiceDiscoveryServer)){printNameOfDevice("ServiceDiscoveryServer");}
@@ -171,13 +171,21 @@ void cBleController::slotServiceDiscovered(const QBluetoothUuid &newService)
     else
     {
         printNameOfDevice("Unknown service! DiscoverDetails...");
-        m_Service = new cBleService(nullptr, m_BleController->createServiceObject(newService));
+//        m_Service = new cBleService(nullptr, m_BleController->createServiceObject(newService));
 
-        connect(m_Service, &cBleService::signalLog,
-                this, &cBleController::signalLog);
-        connect(m_Service, &cBleService::signalReceiveData,
-                this, &cBleController::signalReceiveData);
+//        connect(m_Service, &cBleService::signalLog,
+//                this, &cBleController::signalLog);
+//        connect(m_Service, &cBleService::signalReceiveData,
+//                this, &cBleController::signalReceiveData);
     }
+
+    m_Service = new cBleService(this, m_BleController->createServiceObject(newService));
+
+    connect(m_Service, &cBleService::signalLog,
+            this, &cBleController::signalLog);
+    connect(m_Service, &cBleService::signalReceiveData,
+            this, &cBleController::signalReceiveData);
+
 }
 // ----------------------------------------------------------------------------
 void cBleController::TransmitBleData(const QByteArray &data)
