@@ -19,6 +19,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    Ble/BleDataStructures.h \
     Ble/cblecontroller.h \
     Ble/cbledev.h \
     Ble/cbledevice_old.h \

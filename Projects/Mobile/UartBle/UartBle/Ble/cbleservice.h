@@ -4,12 +4,8 @@
 #include <QObject>
 #include <QtBluetooth/QLowEnergyService>
 #include <QtBluetooth/QLowEnergyDescriptor>
+#include "Ble/BleDataStructures.h"
 
-struct Characteristic
-{
-    QString uuid;
-    QList<QString> property_type;
-};
 
 class cBleService : public QObject
 {
@@ -26,8 +22,9 @@ public:
 
     void TransmitBleDataByUuid(const QString &uuid, const QByteArray &data);
 
+    ServiceDescription GetDescription() const;
     QString GetServiceUuid() const;
-    QList<Characteristic> GetAllServiceCharacteristics() const;
+    QList<CharacteristicDescription> GetAllServiceCharacteristics() const;
 signals:
     void signalReceiveData(const QString &uuid, const QByteArray &data);
     void signalLog(const QString &text);

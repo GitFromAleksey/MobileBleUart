@@ -16,7 +16,7 @@ public:
 
     void TransmitBleData(const QByteArray &data);
 
-    void GetServices();
+    QList<ServiceDescription> GetServicesDescription();
 
     bool IsConnected() const;
 

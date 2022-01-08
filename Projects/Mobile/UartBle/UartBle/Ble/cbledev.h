@@ -4,8 +4,9 @@
 #include <QObject>
 #include <QMap>
 #include <QString>
-#include "Ble/cblediscoverydevicesagent.h"
 #include <QtBluetooth/QBluetoothLocalDevice>
+#include "Ble/BleDataStructures.h"
+#include "Ble/cblediscoverydevicesagent.h"
 #include "Ble/cblecontroller.h"
 
 class cBleDev : public QObject
@@ -25,6 +26,8 @@ public:
     void Disconnect();
 
     void TransmitBleData(const QByteArray &data);
+
+    QList<ServiceDescription> GetConnectedDeviceDescribtion();
 
 private slots:
 

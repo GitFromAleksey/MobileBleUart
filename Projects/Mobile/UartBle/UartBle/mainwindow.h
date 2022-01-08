@@ -34,6 +34,8 @@ public slots:
 private slots:
     void on_pushButtonConnect_2_clicked();
 
+    void on_pushButtonConnect_3_clicked();
+
 private:
     cBleDevice m_ble;
     cBleDev *m_BleDevTest;

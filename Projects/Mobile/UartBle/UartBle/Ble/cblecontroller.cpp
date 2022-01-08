@@ -202,12 +202,14 @@ void cBleController::TransmitBleData(const QByteArray &data)
     m_Service->TransmitBleData(data);
 }
 // ----------------------------------------------------------------------------
-void cBleController::GetServices()
+QList<ServiceDescription> cBleController::GetServicesDescription()
 {
+    QList<ServiceDescription> services;
     for(auto it = m_ServiceList.begin(); it != m_ServiceList.end(); ++it)
     {
-        (*it)->GetAllServiceCharacteristics();
+        services.append( (*it)->GetDescription() );
     }
+    return services;
 }
 // ----------------------------------------------------------------------------
 bool cBleController::IsConnected() const

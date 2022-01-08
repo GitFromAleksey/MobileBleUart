@@ -210,18 +210,29 @@ void cBleService::TransmitBleDataByUuid(const QString &uuid, const QByteArray &d
     }
 }
 // ----------------------------------------------------------------------------
+ServiceDescription cBleService::GetDescription() const
+{
+    ServiceDescription d;
+
+    d.name = m_service->serviceName();
+    d.uuid = GetServiceUuid();
+    d.characteristics = GetAllServiceCharacteristics();
+
+    return d;
+}
+// ----------------------------------------------------------------------------
 QString cBleService::GetServiceUuid() const
 {
     return m_service->serviceUuid().toString();
 }
 // ----------------------------------------------------------------------------
-QList<Characteristic> cBleService::GetAllServiceCharacteristics() const
+QList<CharacteristicDescription> cBleService::GetAllServiceCharacteristics() const
 {
-    QList<Characteristic> characteristics;
+    QList<CharacteristicDescription> characteristics;
 
     for(auto it = m_Characteristics.begin(); it != m_Characteristics.end(); ++it)
     {
-        Characteristic ch;
+        CharacteristicDescription ch;
 
         ch.uuid = it->uuid().toString();
 

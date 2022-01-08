@@ -57,6 +57,7 @@ void cBleDev::slotDiscoveryAgentEventHandler(const cBleDiscoveryDevicesAgent::Ev
 {
     QString name;
     QString address;
+    QList<ServiceDescription> services;
 
     switch (e)
     {
@@ -121,8 +122,7 @@ void cBleDev::TransmitBleData(const QByteArray &data)
     m_BleController.TransmitBleData(data);
 }
 // ----------------------------------------------------------------------------
-//void cBleDev::slotLog(const QString &text)
-//{
-//    emit signalLog(text);
-//}
-// ----------------------------------------------------------------------------
+QList<ServiceDescription> cBleDev::GetConnectedDeviceDescribtion()
+{
+    return m_BleController.GetServicesDescription();
+}
