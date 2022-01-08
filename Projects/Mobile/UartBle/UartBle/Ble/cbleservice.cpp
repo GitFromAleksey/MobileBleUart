@@ -46,14 +46,17 @@ void cBleService::slotStateChanged(QLowEnergyService::ServiceState newState)
             break;
         case QLowEnergyService::ServiceDiscovered:  // all details have been synchronized
             hrChar = m_service->characteristics();
+
             tmp_string.append("ServiceDiscovered: characteristic cnt: " + QString::number(hrChar.count()) + ","); // PrintLog("ServiceDiscovered: characteristic cnt: " + QString::number(hrChar.count()));
 
             for(auto it = hrChar.begin(); it != hrChar.end(); ++it)
             {
+//                m_Characteristics.append(&(*it));
+                m_Characteristics.append((*it));
     //            if(it->isValid())
                 QLowEnergyDescriptor m_NotificationDesc = it->descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
 
-                tmp_string.append("\nService name: " + it->name() + ", uuid: " + it->uuid().toString() + ":"); // PrintLog(" Service name: " + it->name() + "; uuid: " + it->uuid().toString());
+                tmp_string.append("\nCharacteristic name: " + it->name() + ", uuid: " + it->uuid().toString() + ":"); // PrintLog(" Service name: " + it->name() + "; uuid: " + it->uuid().toString());
 
                 if(it->properties() & QLowEnergyCharacteristic::PropertyType::Unknown)
                     tmp_string.append("Property Unknown,"); // PrintLog("Property Unknown");
@@ -185,6 +188,65 @@ void cBleService::TransmitBleData(const QByteArray &data)
     {
         PrintLog("TransmitBleData: there are no transmit services");
     }
+}
+// ----------------------------------------------------------------------------
+// отправка данных по uuid через конкретную характеристику
+void cBleService::TransmitBleDataByUuid(const QString &uuid, const QByteArray &data)
+{
+    for(auto it = m_Characteristics.begin(); it != m_Characteristics.end(); ++it)
+    {
+        QUuid _uuid = QUuid::fromString(uuid);
+        QLowEnergyCharacteristic char_stics = *it;
+        if(_uuid == char_stics.uuid())
+        {
+            if(char_stics.properties() & QLowEnergyCharacteristic::PropertyType::Write)
+            {
+                if(m_service)
+                {
+                    m_service->writeCharacteristic(char_stics, data, QLowEnergyService::WriteWithResponse);
+                }
+            }
+        }
+    }
+}
+// ----------------------------------------------------------------------------
+QString cBleService::GetServiceUuid() const
+{
+    return m_service->serviceUuid().toString();
+}
+// ----------------------------------------------------------------------------
+QList<Characteristic> cBleService::GetAllServiceCharacteristics() const
+{
+    QList<Characteristic> characteristics;
+
+    for(auto it = m_Characteristics.begin(); it != m_Characteristics.end(); ++it)
+    {
+        Characteristic ch;
+
+        ch.uuid = it->uuid().toString();
+
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::Unknown)
+            ch.property_type.append("Unknown");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::Broadcasting)
+            ch.property_type.append("Broadcasting");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::Read)
+            ch.property_type.append("Read");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteNoResponse)
+            ch.property_type.append("WriteNoResponse");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::Write)
+            ch.property_type.append("Write");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::Notify)
+            ch.property_type.append("Notify");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::Indicate)
+            ch.property_type.append("Indicate");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::WriteSigned)
+            ch.property_type.append("WriteSigned");
+        if(it->properties() & QLowEnergyCharacteristic::PropertyType::ExtendedProperty)
+            ch.property_type.append("ExtendedProperty");
+
+        characteristics.append(ch);
+    }
+    return characteristics;
 }
 // ----------------------------------------------------------------------------
 // TODO тестовый метод

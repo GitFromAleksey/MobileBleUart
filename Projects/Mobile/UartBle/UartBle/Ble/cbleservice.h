@@ -5,6 +5,12 @@
 #include <QtBluetooth/QLowEnergyService>
 #include <QtBluetooth/QLowEnergyDescriptor>
 
+struct Characteristic
+{
+    QString uuid;
+    QList<QString> property_type;
+};
+
 class cBleService : public QObject
 {
     Q_OBJECT
@@ -18,6 +24,10 @@ public:
 
     void TransmitBleData(const QByteArray &data);
 
+    void TransmitBleDataByUuid(const QString &uuid, const QByteArray &data);
+
+    QString GetServiceUuid() const;
+    QList<Characteristic> GetAllServiceCharacteristics() const;
 signals:
     void signalReceiveData(const QString &uuid, const QByteArray &data);
     void signalLog(const QString &text);
@@ -45,6 +55,7 @@ private:
     QLowEnergyService *m_service;
     QLowEnergyCharacteristic m_ReadCharacteristic;
     QLowEnergyCharacteristic m_WriteCharacteristic;
+    QList<QLowEnergyCharacteristic> m_Characteristics;
 
     void PrintLog(const QString &text);
 };

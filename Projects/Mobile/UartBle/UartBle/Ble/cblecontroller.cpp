@@ -202,6 +202,14 @@ void cBleController::TransmitBleData(const QByteArray &data)
     m_Service->TransmitBleData(data);
 }
 // ----------------------------------------------------------------------------
+void cBleController::GetServices()
+{
+    for(auto it = m_ServiceList.begin(); it != m_ServiceList.end(); ++it)
+    {
+        (*it)->GetAllServiceCharacteristics();
+    }
+}
+// ----------------------------------------------------------------------------
 bool cBleController::IsConnected() const
 {
     QLowEnergyController::ControllerState state;

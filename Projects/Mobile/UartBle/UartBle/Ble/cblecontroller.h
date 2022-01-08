@@ -16,6 +16,7 @@ public:
 
     void TransmitBleData(const QByteArray &data);
 
+    void GetServices();
 
     bool IsConnected() const;
 
